@@ -62,8 +62,16 @@ Bytecode Age: 0
 ```
 
 ```bash
-$ make clean
-✓ Done
+$ DEBUG=1 node machine
+[DEBUG] OP [ 'LdaZero' ]
+[DEBUG] OP [ 'Star0' ]
+[DEBUG] OP [ 'Star1' ]
+[DEBUG] OP [ 'TestLessThan', 'a0', [ 0 ] ]
+[DEBUG] ST {
+  accumulators: { a0: 0 },
+  registers: { r0: 0, r1: 0, r2: undefined },
+  flags: { boolean: false }
+}
 ```
 
 ## Resources
