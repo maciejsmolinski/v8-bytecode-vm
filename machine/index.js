@@ -1,5 +1,5 @@
-const INPUT = "earlyReturn.profile";
+const INPUT = 'earlyReturn.profile';
 
-import Register from "./register";
-import Accumulator from "./accumulator";
-import Machine from "./machine";
+const Register = require('./register');
+const Accumulator = require('./accumulator');
+const Machine = require('./machine');

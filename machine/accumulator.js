@@ -1,5 +1,5 @@
-import Register from "./register";
+const Register = require('./register');
 
-export default function Accumulator() {
+module.exports = function Accumulator() {
   return Register();
-}
+};
