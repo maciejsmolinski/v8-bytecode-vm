@@ -51,3 +51,7 @@ Bytecode Age: 0
 $ make clean
 ✓ Done
 ```
+
+## Resources
+
+- V8 / Interpreter / ByteCodes https://source.chromium.org/chromium/chromium/src/+/main:v8/src/interpreter/bytecodes.h;drc=main
