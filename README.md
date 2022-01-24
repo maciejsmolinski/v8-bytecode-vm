@@ -2,21 +2,35 @@
 
 An incomplete v8 bytecode interpreter / virtual machine for a subset of instructions. Plus, a tiny playground for profiling javascript code and inspecting the corresponding bytecode.
 
-## Usage
+## Generating bytecode
 
 Generate `.profile` file for each javascript file in the root directory
 
 ```bash
-make
+$ make
 ```
 
 Clean all `.profile` files in the root directory
 
 ```bash
-make clean
+$ make clean
 ```
 
-## Output
+## Running virtual machine
+
+Note: Does not currently parse `.profile` files, the VM is currently work in progress
+
+```bash
+$ node machine
+```
+
+With debug information
+
+```bash
+$ DEBUG=1 node machine
+```
+
+## Interaction Example
 
 ```bash
 $ make
