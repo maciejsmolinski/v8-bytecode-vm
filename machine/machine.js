@@ -1,7 +1,12 @@
-module.exports = function Machine(accumulators, registers) {
+module.exports = function Machine(
+  accumulators = {},
+  registers = {},
+  flags = {}
+) {
   const state = {
     accumulators,
     registers,
+    flags,
   };
 
   return {
@@ -20,8 +25,10 @@ function snapshot(object) {
 }
 
 function inspect(state) {
-  return {
-    accumulators: snapshot(state.accumulators),
-    registers: snapshot(state.registers),
-  };
+  return Object.entries(state).reduce((acc, [key, val]) => {
+    return {
+      ...acc,
+      [key]: snapshot(val),
+    };
+  }, {});
 }
