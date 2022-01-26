@@ -11,3 +11,11 @@ clean:
 	@ rm -f examples/*.bytecode
 	@ echo "✓ Done"
 
+install:
+	@ npm install
+
+test:
+	@ npm run test
+
+tdd:
+	@ npm run test:watch

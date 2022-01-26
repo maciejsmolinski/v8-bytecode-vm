@@ -12,10 +12,10 @@ $ DEBUG=1 node scripts/start.js
 
 ## Running test suites
 
-Install dependencies with `npm install` and execute
+Install dependencies with `make install` and execute
 
 ```bash
-$ npm test # or npm run test:watch
+$ make test # or make tdd
 ```
 
 ## Generating bytecode
