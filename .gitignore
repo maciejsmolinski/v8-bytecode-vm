@@ -1,2 +1,2 @@
-*.profile
+*.bytecode
 node_modules

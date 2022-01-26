@@ -1,13 +1,13 @@
-SOURCES=$(wildcard *.js)
-OUTPUTS=$(subst js,profile,$(SOURCES))
+SOURCES=$(wildcard examples/*.js)
+OUTPUTS=$(subst js,bytecode,$(SOURCES))
 
-%.profile: %.js
+examples/%.bytecode: examples/%.js
 	@ node --print-bytecode --print-bytecode-filter=main $< > $@
 	@ echo "✓ Generated" $@
 
 default: $(OUTPUTS)
 
 clean: 
-	@ rm -f *.profile
+	@ rm -f examples/*.bytecode
 	@ echo "✓ Done"
 
