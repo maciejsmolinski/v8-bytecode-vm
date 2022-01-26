@@ -19,3 +19,9 @@ test:
 
 tdd:
 	@ npm run test:watch
+
+start:
+	@ DEBUG=1 node scripts/start.js
+
+watch:
+	@ DEBUG=1 npx nodemon scripts/start.js

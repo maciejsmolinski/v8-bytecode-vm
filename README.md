@@ -7,7 +7,7 @@ An incomplete v8 bytecode interpreter / virtual machine for a subset of instruct
 Note: Does not currently parse `.bytecode` files, the VM is currently work in progress
 
 ```bash
-$ DEBUG=1 node scripts/start.js
+$ make start
 ```
 
 ## Running test suites
@@ -64,7 +64,7 @@ Bytecode Age: 0
 ```
 
 ```bash
-$ DEBUG=1 node scripts/start.js
+$ make start
 [DEBUG] OP [ 'LdaZero' ]
 [DEBUG] OP [ 'Star0' ]
 [DEBUG] OP [ 'Star1' ]
