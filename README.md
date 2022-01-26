@@ -2,6 +2,22 @@
 
 An incomplete v8 bytecode interpreter / virtual machine for a subset of instructions. Plus, a tiny playground for profiling javascript code and inspecting the corresponding bytecode.
 
+## Running virtual machine
+
+Note: Does not currently parse `.profile` files, the VM is currently work in progress
+
+```bash
+$ DEBUG=1 node scripts/start.js
+```
+
+## Running test suites
+
+Install dependencies with `npm install` and execute
+
+```bash
+$ npm test # or npm run test:watch
+```
+
 ## Generating bytecode
 
 Generate `.profile` file for each javascript file in the root directory
@@ -14,20 +30,6 @@ Clean all `.profile` files in the root directory
 
 ```bash
 $ make clean
-```
-
-## Running virtual machine
-
-Note: Does not currently parse `.profile` files, the VM is currently work in progress
-
-```bash
-$ node machine
-```
-
-With debug information
-
-```bash
-$ DEBUG=1 node machine
 ```
 
 ## Interaction Example
@@ -62,14 +64,15 @@ Bytecode Age: 0
 ```
 
 ```bash
-$ DEBUG=1 node machine
+$ DEBUG=1 node scripts/start.js
 [DEBUG] OP [ 'LdaZero' ]
 [DEBUG] OP [ 'Star0' ]
 [DEBUG] OP [ 'Star1' ]
+[DEBUG] OP [ 'Star2' ]
 [DEBUG] OP [ 'TestLessThan', 'a0', [ 0 ] ]
 [DEBUG] ST {
   accumulators: { a0: 0 },
-  registers: { r0: 0, r1: 0, r2: undefined },
+  registers: { r0: 0, r1: 0, r2: 0 },
   flags: { boolean: false }
 }
 ```
