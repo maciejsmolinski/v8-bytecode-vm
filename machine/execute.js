@@ -24,7 +24,7 @@ module.exports = function execute(machine, instructions) {
         const first = instruction[1];
         const second = instruction[2][0]; // Immediate value
 
-        machine.flags.boolean.set(machine.accumulators[first] < second);
+        machine.flags.boolean.set(machine.accumulators[first].get() < second);
         break;
       default:
         break;
@@ -33,4 +33,6 @@ module.exports = function execute(machine, instructions) {
   }
 
   debug('ST', machine.inspect());
+
+  return machine;
 };
