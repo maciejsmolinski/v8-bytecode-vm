@@ -1,0 +1,23 @@
+{
+  "name": "v8-bytecode-vm",
+  "version": "1.0.0",
+  "description": "V8 ByteCode Virtual Machine",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/maciejsmolinski/v8-bytecode-vm.git"
+  },
+  "author": "Maciej Smolinski <contact@maciejsmolinski.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/maciejsmolinski/v8-bytecode-vm/issues"
+  },
+  "homepage": "https://github.com/maciejsmolinski/v8-bytecode-vm#readme",
+  "devDependencies": {
+    "jest": "^27.4.7"
+  }
+}
