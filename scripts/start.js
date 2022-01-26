@@ -6,6 +6,7 @@ const instructions = [
   ['Star1'],
   ['Star2'],
   ['TestLessThan', 'a0', [0]],
+  ['Return'],
 ];
 
 build()(instructions);

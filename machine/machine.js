@@ -1,3 +1,5 @@
+const Return = require('./return');
+
 module.exports = function Machine(
   accumulators = {},
   registers = {},
@@ -7,6 +9,7 @@ module.exports = function Machine(
     accumulators,
     registers,
     flags,
+    return: Return(),
   };
 
   return {
@@ -28,7 +31,7 @@ function inspect(state) {
   return Object.entries(state).reduce((acc, [key, val]) => {
     return {
       ...acc,
-      [key]: snapshot(val),
+      [key]: typeof val?.get === 'function' ? val.get() : snapshot(val),
     };
   }, {});
 }

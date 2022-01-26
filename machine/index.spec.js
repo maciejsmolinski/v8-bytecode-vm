@@ -49,5 +49,12 @@ describe('Virtual Machine', () => {
 
       expect(result).toHaveProperty(`flags.boolean`, flag);
     });
+
+    it('Return sets the return value to the value from the a0', () => {
+      const instructions = [['LdaZero'], ['Return']];
+      const result = execute(instructions).inspect();
+
+      expect(result).toHaveProperty(`return`, 0);
+    });
   });
 });

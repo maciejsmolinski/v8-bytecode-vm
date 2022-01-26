@@ -20,6 +20,9 @@ module.exports = function execute(machine, instructions) {
       case 'Star2':
         machine.registers.r2.set(machine.accumulators.a0.get());
         break;
+      case 'Return':
+        machine.return.set(machine.accumulators.a0.get());
+        break;
       case 'TestLessThan':
         const first = instruction[1];
         const second = instruction[2][0]; // Immediate value
