@@ -79,4 +79,5 @@ $ make start
 
 ## Resources
 
+- V8 / Interpreter / Ignition: [Design Doc](https://docs.google.com/document/d/11T2CRex9hXxoJwbYqVQ32yIPMh0uouUZLdyrtmMoL44/edit)
 - V8 / Interpreter / ByteCodes: [Chromium](https://source.chromium.org/chromium/chromium/src/+/main:v8/src/interpreter/bytecodes.h;drc=main), [Node](https://github.com/nodejs/node/blob/master/deps/v8/src/interpreter/bytecodes.h)
