@@ -7,6 +7,7 @@ const instructions = [
   ['Star2'],
   ['TestLessThan', 'a0', [0]],
   ['LdaGlobal', [0], [1]],
+  ['Star1'],
   ['Return'],
 ];
 
