@@ -70,10 +70,15 @@ $ make start
 [DEBUG] OP [ 'Star1' ]
 [DEBUG] OP [ 'Star2' ]
 [DEBUG] OP [ 'TestLessThan', 'a0', [ 0 ] ]
+[DEBUG] OP [ 'LdaGlobal', [ 0 ], [ 1 ] ]
+[DEBUG] OP [ 'Star1' ]
+[DEBUG] OP [ 'Return' ]
 [DEBUG] ST {
-  accumulators: { a0: 0 },
-  registers: { r0: 0, r1: 0, r2: 0 },
-  flags: { boolean: false }
+  accumulators: { a0: [Function: log] },
+  registers: { r0: 0, r1: [Function: log], r2: 0 },
+  flags: { boolean: false },
+  constants: [ 'console', 'log', 'Less than zero', 'Zero or more' ],
+  return: [Function: log]
 }
 ```
 
