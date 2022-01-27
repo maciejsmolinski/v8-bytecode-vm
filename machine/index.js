@@ -18,7 +18,9 @@ function build(constants) {
     boolean: Register(),
   };
 
-  const machine = Machine(accumulators, registers, flags, constants);
+  const ip = Register();
+
+  const machine = Machine(accumulators, registers, flags, ip, constants);
 
   return function (instructions) {
     return execute(machine, instructions);

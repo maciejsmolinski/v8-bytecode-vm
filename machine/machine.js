@@ -4,6 +4,7 @@ module.exports = function Machine(
   accumulators = {},
   registers = {},
   flags = {},
+  ip,
   constants = []
 ) {
   const state = {
@@ -11,6 +12,7 @@ module.exports = function Machine(
     registers,
     flags,
     constants,
+    ip,
     return: Return(),
   };
 
@@ -30,13 +32,14 @@ function snapshot(object) {
 }
 
 function inspect(state) {
+  const isWrapped = (key) => !['constants'].includes(key);
   const unwrap = (val) =>
     typeof val?.get === 'function' ? val.get() : snapshot(val);
 
   return Object.entries(state).reduce((acc, [key, val]) => {
     return {
       ...acc,
-      [key]: key === 'constants' ? val : unwrap(val),
+      [key]: isWrapped(key) ? unwrap(val) : val,
     };
   }, {});
 }

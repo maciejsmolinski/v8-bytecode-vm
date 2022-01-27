@@ -1,7 +1,7 @@
 const { debug } = require('./utils');
 
 module.exports = function execute(machine, instructions) {
-  let pointer = 0;
+  let pointer = machine.ip.set(0);
   let instruction = instructions[pointer];
 
   while (instruction) {
@@ -38,7 +38,9 @@ module.exports = function execute(machine, instructions) {
       default:
         break;
     }
-    instruction = instructions[++pointer];
+
+    machine.ip.set(++pointer);
+    instruction = instructions[pointer];
   }
 
   debug('ST', machine.inspect());
