@@ -78,6 +78,7 @@ $ make start
   registers: { r0: 0, r1: [Function: log], r2: 0 },
   flags: { boolean: false },
   constants: [ 'console', 'log', 'Less than zero', 'Zero or more' ],
+  ip: 8,
   return: [Function: log]
 }
 ```
