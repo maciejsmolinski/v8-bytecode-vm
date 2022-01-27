@@ -3,12 +3,14 @@ const Return = require('./return');
 module.exports = function Machine(
   accumulators = {},
   registers = {},
-  flags = {}
+  flags = {},
+  constants = []
 ) {
   const state = {
     accumulators,
     registers,
     flags,
+    constants,
     return: Return(),
   };
 
@@ -28,10 +30,13 @@ function snapshot(object) {
 }
 
 function inspect(state) {
+  const unwrap = (val) =>
+    typeof val?.get === 'function' ? val.get() : snapshot(val);
+
   return Object.entries(state).reduce((acc, [key, val]) => {
     return {
       ...acc,
-      [key]: typeof val?.get === 'function' ? val.get() : snapshot(val),
+      [key]: key === 'constants' ? val : unwrap(val),
     };
   }, {});
 }

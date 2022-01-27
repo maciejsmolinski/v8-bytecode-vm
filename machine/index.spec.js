@@ -2,9 +2,11 @@ const buildMachine = require('./');
 
 describe('Virtual Machine', () => {
   let execute;
+  let constants;
 
   beforeEach(() => {
-    execute = buildMachine();
+    constants = ['console', 'log'];
+    execute = buildMachine(constants);
   });
 
   describe('When initialized', () => {
@@ -26,6 +28,13 @@ describe('Virtual Machine', () => {
       const result = execute(instructions).inspect();
 
       expect(result).toHaveProperty('accumulators.a0', 0);
+    });
+
+    it('LdaGlobal loads global with name defined at index in constant pool into accumulator', () => {
+      const instructions = [['LdaGlobal', [0], [1]]];
+      const result = execute(instructions).inspect();
+
+      expect(result).toHaveProperty('accumulators.a0', global.console.log);
     });
 
     it.each([

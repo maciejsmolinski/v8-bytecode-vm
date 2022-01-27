@@ -3,7 +3,7 @@ const Accumulator = require('./accumulator');
 const Machine = require('./machine');
 const execute = require('./execute');
 
-function build() {
+function build(constants) {
   const registers = {
     r0: Register(),
     r1: Register(),
@@ -18,7 +18,7 @@ function build() {
     boolean: Register(),
   };
 
-  const machine = Machine(accumulators, registers, flags);
+  const machine = Machine(accumulators, registers, flags, constants);
 
   return function (instructions) {
     return execute(machine, instructions);

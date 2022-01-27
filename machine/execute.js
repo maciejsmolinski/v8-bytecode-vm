@@ -29,6 +29,12 @@ module.exports = function execute(machine, instructions) {
 
         machine.flags.boolean.set(machine.accumulators[first].get() < second);
         break;
+      case 'LdaGlobal':
+        const [a, b] = [instruction[1][0], instruction[2][0]];
+        const [p1, p2] = [machine.constants[a], machine.constants[b]];
+
+        machine.accumulators.a0.set(global[p1][p2]);
+        break;
       default:
         break;
     }
