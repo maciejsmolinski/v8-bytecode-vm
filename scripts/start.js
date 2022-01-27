@@ -8,6 +8,9 @@ const instructions = [
   ['TestLessThan', 'a0', [0]],
   ['LdaGlobal', [0], [1]],
   ['Star1'],
+  ['LdaConstant', [2]],
+  ['Star2'],
+  ['LdaZero'],
   ['Return'],
 ];
 

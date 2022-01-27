@@ -29,12 +29,17 @@ module.exports = function execute(machine, instructions) {
 
         machine.flags.boolean.set(machine.accumulators[first].get() < second);
         break;
+      case 'LdaConstant':
+        const [const_index] = [instruction[1][0]];
+
+        machine.accumulators.a0.set(machine.constants[const_index]);
+        break;
       case 'LdaGlobal':
-        const [name, feedback_slot_index] = [
+        const [name_index, feedback_slot_index] = [
           instruction[1][0],
           instruction[2][0],
         ];
-        const property = machine.constants[name];
+        const property = machine.constants[name_index];
 
         machine.accumulators.a0.set(global[property]);
         break;
