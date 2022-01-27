@@ -65,5 +65,12 @@ describe('Virtual Machine', () => {
 
       expect(result).toHaveProperty(`return`, 0);
     });
+
+    it.todo('JumpIfFalse [addr]');
+    it.todo('LdaNamedProperty r [x] [y]');
+    it.todo('LdaConstant [x]');
+    it.todo('Ldar a');
+    it.todo('MulSmi [x], [y]');
+    it.todo('CallProperty1 r r r [x]');
   });
 });
