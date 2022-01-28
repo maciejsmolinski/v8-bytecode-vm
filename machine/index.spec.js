@@ -37,6 +37,17 @@ describe('Virtual Machine', () => {
       expect(result).toHaveProperty('accumulators.a0', global.console);
     });
 
+    it('`LdaNamedProperty r [const_index] [y]` loads r[constants[const_index]] into accumulator', () => {
+      const instructions = [
+        ['LdaGlobal', [0], [1]],
+        ['Star1'],
+        ['LdaNamedProperty', 'r1', [1], [3]],
+      ];
+      const result = execute(instructions).inspect();
+
+      expect(result).toHaveProperty('accumulators.a0', global.console.log);
+    });
+
     it('`LdaConstant [const_index]` loads constants[const_index] into accumulator', () => {
       const instructions = [['LdaConstant', [2]]];
       const result = execute(instructions).inspect();
@@ -74,7 +85,6 @@ describe('Virtual Machine', () => {
     });
 
     it.todo('`JumpIfFalse [addr]`');
-    it.todo('`LdaNamedProperty r [x] [y]`');
     it.todo('`Ldar a`');
     it.todo('`MulSmi [x] [y]`');
     it.todo('`CallProperty1 r r r [x]`');

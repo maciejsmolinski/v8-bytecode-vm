@@ -8,33 +8,40 @@ module.exports = function execute(machine, instructions) {
     debug('OP', instruction);
 
     switch (instruction[0]) {
-      case 'LdaZero':
+      case 'LdaZero': {
         machine.accumulators.a0.set(0);
         break;
-      case 'Star0':
+      }
+      case 'Star0': {
         machine.registers.r0.set(machine.accumulators.a0.get());
         break;
-      case 'Star1':
+      }
+      case 'Star1': {
         machine.registers.r1.set(machine.accumulators.a0.get());
         break;
-      case 'Star2':
+      }
+      case 'Star2': {
         machine.registers.r2.set(machine.accumulators.a0.get());
         break;
-      case 'Return':
+      }
+      case 'Return': {
         machine.return.set(machine.accumulators.a0.get());
         break;
-      case 'TestLessThan':
+      }
+      case 'TestLessThan': {
         const first = instruction[1];
         const second = instruction[2][0]; // Immediate value
 
         machine.flags.boolean.set(machine.accumulators[first].get() < second);
         break;
-      case 'LdaConstant':
+      }
+      case 'LdaConstant': {
         const [const_index] = [instruction[1][0]];
 
         machine.accumulators.a0.set(machine.constants[const_index]);
         break;
-      case 'LdaGlobal':
+      }
+      case 'LdaGlobal': {
         const [name_index, feedback_slot_index] = [
           instruction[1][0],
           instruction[2][0],
@@ -43,6 +50,20 @@ module.exports = function execute(machine, instructions) {
 
         machine.accumulators.a0.set(global[property]);
         break;
+      }
+      case 'LdaNamedProperty': {
+        const [register, name_index, feedback_slot_index] = [
+          instruction[1],
+          instruction[2][0],
+          instruction[3][0],
+        ];
+        const property = machine.constants[name_index];
+
+        machine.accumulators.a0.set(
+          machine.registers[register].get()[property]
+        );
+        break;
+      }
       default:
         break;
     }

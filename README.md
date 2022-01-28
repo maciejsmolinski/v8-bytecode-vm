@@ -72,24 +72,18 @@ $ make start
 [DEBUG] OP [ 'TestLessThan', 'a0', [ 0 ] ]
 [DEBUG] OP [ 'LdaGlobal', [ 0 ], [ 1 ] ]
 [DEBUG] OP [ 'Star1' ]
+[DEBUG] OP [ 'LdaNamedProperty', 'r1', [ 1 ], [ 3 ] ]
+[DEBUG] OP [ 'Star1' ]
 [DEBUG] OP [ 'LdaConstant', [ 2 ] ]
 [DEBUG] OP [ 'Star2' ]
 [DEBUG] OP [ 'LdaZero' ]
 [DEBUG] OP [ 'Return' ]
 [DEBUG] ST {
   accumulators: { a0: 0 },
-  registers: {
-    r0: 0,
-    r1: Object [console] {
-      log: [Function: log],
-      warn: [Function: warn],
-      ...
-    },
-    r2: 'Less than zero'
-  },
+  registers: { r0: 0, r1: [Function: log], r2: 'Less than zero' },
   flags: { boolean: false },
   constants: [ 'console', 'log', 'Less than zero', 'Zero or more' ],
-  ip: 11,
+  ip: 13,
   return: 0
 }
 ```
