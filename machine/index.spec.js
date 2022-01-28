@@ -1,3 +1,4 @@
+const { expect } = require('@jest/globals');
 const buildMachine = require('./');
 
 describe('Virtual Machine', () => {
@@ -43,6 +44,7 @@ describe('Virtual Machine', () => {
         ['Star1'],
         ['LdaNamedProperty', 'r1', [1], [3]],
       ];
+
       const result = execute(instructions).inspect();
 
       expect(result).toHaveProperty('accumulators.a0', global.console.log);
@@ -77,6 +79,36 @@ describe('Virtual Machine', () => {
       expect(result).toHaveProperty(`flags.boolean`, flag);
     });
 
+    it('`CallProperty1 r(prop) r(this) r(arg) [x]` calls fn with single value', () => {
+      let consoleLogMock = jest
+        .spyOn(global.console, 'log')
+        .mockImplementation();
+
+      const instructions = [
+        // r0 = console
+        ['LdaGlobal', [0], [1]],
+        ['Star0'],
+
+        // r1 = console.log
+        ['LdaNamedProperty', 'r0', [1], [3]],
+        ['Star1'],
+
+        // r2 = 'Less than zero'
+        ['LdaConstant', [2]],
+        ['Star2'],
+
+        // a0 = console.log.call(console, 'Less than zero')
+        ['CallProperty1', 'r1', 'r0', 'r2', [5]],
+      ];
+
+      const result = execute(instructions).inspect();
+
+      expect(result).toHaveProperty('accumulators.a0', undefined);
+      expect(consoleLogMock).toHaveBeenCalledWith(constants[2]);
+
+      consoleLogMock.mockRestore();
+    });
+
     it('`Return` sets the return value to the value from the a0', () => {
       const instructions = [['LdaZero'], ['Return']];
       const result = execute(instructions).inspect();
@@ -87,6 +119,5 @@ describe('Virtual Machine', () => {
     it.todo('`JumpIfFalse [addr]`');
     it.todo('`Ldar a`');
     it.todo('`MulSmi [x] [y]`');
-    it.todo('`CallProperty1 r r r [x]`');
   });
 });

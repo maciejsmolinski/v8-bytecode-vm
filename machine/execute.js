@@ -64,6 +64,23 @@ module.exports = function execute(machine, instructions) {
         );
         break;
       }
+      case 'CallProperty1': {
+        const [calleeReg, thisArgReg, arg1Reg, feedback_slot_index] = [
+          instruction[1],
+          instruction[2],
+          instruction[3],
+          instruction[4][0],
+        ];
+
+        const [callee, thisArg, arg1] = [
+          machine.registers[calleeReg].get(),
+          machine.registers[thisArgReg].get(),
+          machine.registers[arg1Reg].get(),
+        ];
+
+        machine.accumulators.a0.set(callee.call(thisArg, arg1));
+        break;
+      }
       default:
         break;
     }

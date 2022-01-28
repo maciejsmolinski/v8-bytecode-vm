@@ -2,20 +2,19 @@ const build = require('../machine');
 
 const instructions = [
   ['LdaZero'],
-  ['Star0'],
-  ['Star1'],
-  ['Star2'],
   ['TestLessThan', 'a0', [0]],
   ['LdaGlobal', [0], [1]],
-  ['Star1'],
-  ['LdaNamedProperty', 'r1', [1], [3]],
+  ['Star0'],
+  ['LdaNamedProperty', 'r0', [1], [3]],
   ['Star1'],
   ['LdaConstant', [2]],
   ['Star2'],
+  ['CallProperty1', 'r1', 'r0', 'r2', [5]],
   ['LdaZero'],
+  ['Star0'],
   ['Return'],
 ];
 
-const constants = ['console', 'log', 'Less than zero', 'Zero or more'];
+const constants = ['console', 'log', '•• Hello World ••'];
 
 build(constants)(instructions);
