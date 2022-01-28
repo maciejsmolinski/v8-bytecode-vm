@@ -10,6 +10,9 @@ Note: Does not currently parse `.bytecode` files, the VM is currently work in pr
 $ make start
 ```
 
+| ![](/assets/preview.gif) |
+|:-:|
+
 ## Running test suites
 
 Install dependencies with `make install` and execute
