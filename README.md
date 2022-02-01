@@ -68,10 +68,7 @@ Bytecode Age: 0
 
 ```bash
 $ make start
-[DEBUG] OP [ 'LdaSmi', [ 6 ] ]
-[DEBUG] OP [ 'Star0' ]
 [DEBUG] OP [ 'LdaZero' ]
-[DEBUG] OP [ 'TestLessThan', 'r0', [ 0 ] ]
 [DEBUG] OP [ 'LdaGlobal', [ 0 ], [ 1 ] ]
 [DEBUG] OP [ 'Star0' ]
 [DEBUG] OP [ 'LdaNamedProperty', 'r0', [ 1 ], [ 3 ] ]
@@ -80,13 +77,15 @@ $ make start
 [DEBUG] OP [ 'Star2' ]
 [DEBUG] OP [ 'CallProperty1', 'r1', 'r0', 'r2', [ 5 ] ]
 •• Hello World ••
-[DEBUG] OP [ 'LdaZero' ]
+[DEBUG] OP [ 'LdaSmi', [ 6 ] ]
 [DEBUG] OP [ 'Star0' ]
+[DEBUG] OP [ 'TestLessThan', 'r0', [ 0 ] ]
+[DEBUG] OP [ 'MulSmi', [ 5 ], [ 0 ] ]
 [DEBUG] OP [ 'Return' ]
 [DEBUG] ST {
   registers: {
-    accumulator: 0,
-    r0: 0,
+    accumulator: 30,
+    r0: 6,
     r1: [Function: log],
     r2: '•• Hello World ••',
     a0: undefined,
@@ -95,8 +94,8 @@ $ make start
   },
   flags: { boolean: false },
   constants: [ 'console', 'log', '•• Hello World ••' ],
-  ip: 14,
-  return: 0
+  ip: 13,
+  return: 30
 }
 ```
 

@@ -1,10 +1,7 @@
 const build = require('../machine');
 
 const instructions = [
-  ['LdaSmi', [6]],
-  ['Star0'],
   ['LdaZero'],
-  ['TestLessThan', 'r0', [0]],
   ['LdaGlobal', [0], [1]],
   ['Star0'],
   ['LdaNamedProperty', 'r0', [1], [3]],
@@ -12,8 +9,10 @@ const instructions = [
   ['LdaConstant', [2]],
   ['Star2'],
   ['CallProperty1', 'r1', 'r0', 'r2', [5]],
-  ['LdaZero'],
+  ['LdaSmi', [6]],
   ['Star0'],
+  ['TestLessThan', 'r0', [0]],
+  ['MulSmi', [5], [0]],
   ['Return'],
 ];
 
