@@ -45,6 +45,15 @@ describe('Virtual Machine', () => {
       });
     });
 
+    describe('LdaUndefined', () => {
+      it('loads undefined into accumulator', () => {
+        const instructions = [['LdaZero'], ['LdaUndefined']];
+        const result = execute(instructions).inspect();
+
+        expect(result).toHaveProperty('registers.accumulator', undefined);
+      });
+    });
+
     describe('LdaGlobal [name_index] [feedback_slot_index]', () => {
       it('loads global[constants[name_index]] into accumulator', () => {
         const instructions = [['LdaGlobal', [0], [1]]];
@@ -185,6 +194,5 @@ describe('Virtual Machine', () => {
     test.todo('JumpIfFalse [addr]');
     test.todo('CreateClosure [addr_const_idx] [_] #flag');
     test.todo('CallUndefinedReceiver r0, r2-r4, [0] [addr]');
-    test.todo('LdaUndefined');
   });
 });

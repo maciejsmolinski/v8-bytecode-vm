@@ -27,6 +27,12 @@ module.exports = function execute(machine, instructions) {
         machine.registers.accumulator.set(value);
         break;
       }
+      case 'LdaUndefined': {
+        debug.explain('registers.accumulator := undefined');
+
+        machine.registers.accumulator.set(undefined);
+        break;
+      }
       case 'Star0': {
         debug.explain('registers.r0 := registers.accumulator');
 
