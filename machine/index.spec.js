@@ -11,14 +11,17 @@ describe('Virtual Machine', () => {
   });
 
   describe('Initialized', () => {
-    it('keeps registers, accumulators and flags uninitialized', () => {
+    it('keeps registers, accumulator and flags uninitialized', () => {
       const instructions = [];
       const result = execute(instructions).inspect();
 
-      expect(result).toHaveProperty('accumulators.a0', undefined);
+      expect(result).toHaveProperty('registers.accumulator', undefined);
       expect(result).toHaveProperty('registers.r1', undefined);
       expect(result).toHaveProperty('registers.r2', undefined);
       expect(result).toHaveProperty('registers.r3', undefined);
+      expect(result).toHaveProperty('registers.a1', undefined);
+      expect(result).toHaveProperty('registers.a2', undefined);
+      expect(result).toHaveProperty('registers.a3', undefined);
       expect(result).toHaveProperty('flags.boolean', undefined);
     });
   });
@@ -28,14 +31,21 @@ describe('Virtual Machine', () => {
       const instructions = [['LdaZero']];
       const result = execute(instructions).inspect();
 
-      expect(result).toHaveProperty('accumulators.a0', 0);
+      expect(result).toHaveProperty('registers.accumulator', 0);
+    });
+
+    it('`LdaSmi [x]` loads small int into accumulator', () => {
+      const instructions = [['LdaSmi', [6]]];
+      const result = execute(instructions).inspect();
+
+      expect(result).toHaveProperty('registers.accumulator', 6);
     });
 
     it('`LdaGlobal [name_index] [feedback_slot_index]` loads global[constants[name_index]] into accumulator', () => {
       const instructions = [['LdaGlobal', [0], [1]]];
       const result = execute(instructions).inspect();
 
-      expect(result).toHaveProperty('accumulators.a0', global.console);
+      expect(result).toHaveProperty('registers.accumulator', global.console);
     });
 
     it('`LdaNamedProperty r [const_index] [y]` loads r[constants[const_index]] into accumulator', () => {
@@ -47,14 +57,17 @@ describe('Virtual Machine', () => {
 
       const result = execute(instructions).inspect();
 
-      expect(result).toHaveProperty('accumulators.a0', global.console.log);
+      expect(result).toHaveProperty(
+        'registers.accumulator',
+        global.console.log
+      );
     });
 
     it('`LdaConstant [const_index]` loads constants[const_index] into accumulator', () => {
       const instructions = [['LdaConstant', [2]]];
       const result = execute(instructions).inspect();
 
-      expect(result).toHaveProperty('accumulators.a0', constants[2]);
+      expect(result).toHaveProperty('registers.accumulator', constants[2]);
     });
 
     it.each([
@@ -69,15 +82,23 @@ describe('Virtual Machine', () => {
     });
 
     it.each([
-      [6, true],
-      [0, false],
-      [-6, false],
-    ])('`TestLessThan a0=0 [%s]` sets boolean flag to %s', (value, flag) => {
-      const instructions = [['LdaZero'], ['TestLessThan', 'a0', [value]]];
-      const result = execute(instructions).inspect();
+      [true, -6],
+      [false, 0],
+      [false, 6],
+    ])(
+      '`TestLessThan [reg] [_]` sets flags.boolean=%s (reg<accumulator) with reg=%s and accumulator=0)',
+      (flag, value) => {
+        const instructions = [
+          ['LdaSmi', [value]],
+          ['Star0'],
+          ['LdaZero'],
+          ['TestLessThan', 'r0', [0]],
+        ];
+        const result = execute(instructions).inspect();
 
-      expect(result).toHaveProperty(`flags.boolean`, flag);
-    });
+        expect(result).toHaveProperty(`flags.boolean`, flag);
+      }
+    );
 
     it('`CallProperty1 r(prop) r(this) r(arg) [x]` calls fn with single value', () => {
       let consoleLogMock = jest
@@ -97,19 +118,19 @@ describe('Virtual Machine', () => {
         ['LdaConstant', [2]],
         ['Star2'],
 
-        // a0 = console.log.call(console, 'Less than zero')
+        // accumulator = console.log.call(console, 'Less than zero')
         ['CallProperty1', 'r1', 'r0', 'r2', [5]],
       ];
 
       const result = execute(instructions).inspect();
 
-      expect(result).toHaveProperty('accumulators.a0', undefined);
+      expect(result).toHaveProperty('registers.accumulator', undefined);
       expect(consoleLogMock).toHaveBeenCalledWith(constants[2]);
 
       consoleLogMock.mockRestore();
     });
 
-    it('`Return` sets the return value to the value from the a0', () => {
+    it('`Return` sets the return value to the value from the accumulator', () => {
       const instructions = [['LdaZero'], ['Return']];
       const result = execute(instructions).inspect();
 

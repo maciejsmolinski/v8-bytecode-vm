@@ -5,13 +5,13 @@ const execute = require('./execute');
 
 function build(constants) {
   const registers = {
+    accumulator: Accumulator(),
     r0: Register(),
     r1: Register(),
     r2: Register(),
-  };
-
-  const accumulators = {
-    a0: Accumulator(),
+    a0: Register(),
+    a1: Register(),
+    a2: Register(),
   };
 
   const flags = {
@@ -20,7 +20,7 @@ function build(constants) {
 
   const ip = Register();
 
-  const machine = Machine(accumulators, registers, flags, ip, constants);
+  const machine = Machine(registers, flags, ip, constants);
 
   return function (instructions) {
     return execute(machine, instructions);

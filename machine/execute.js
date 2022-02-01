@@ -9,36 +9,42 @@ module.exports = function execute(machine, instructions) {
 
     switch (instruction[0]) {
       case 'LdaZero': {
-        machine.accumulators.a0.set(0);
+        machine.registers.accumulator.set(0);
+        break;
+      }
+      case 'LdaSmi': {
+        const value = instruction[1][0]; // Immediate value
+
+        machine.registers.accumulator.set(value);
         break;
       }
       case 'Star0': {
-        machine.registers.r0.set(machine.accumulators.a0.get());
+        machine.registers.r0.set(machine.registers.accumulator.get());
         break;
       }
       case 'Star1': {
-        machine.registers.r1.set(machine.accumulators.a0.get());
+        machine.registers.r1.set(machine.registers.accumulator.get());
         break;
       }
       case 'Star2': {
-        machine.registers.r2.set(machine.accumulators.a0.get());
+        machine.registers.r2.set(machine.registers.accumulator.get());
         break;
       }
       case 'Return': {
-        machine.return.set(machine.accumulators.a0.get());
+        machine.return.set(machine.registers.accumulator.get());
         break;
       }
       case 'TestLessThan': {
         const first = instruction[1];
         const second = instruction[2][0]; // Immediate value
 
-        machine.flags.boolean.set(machine.accumulators[first].get() < second);
+        machine.flags.boolean.set(machine.registers[first].get() < second);
         break;
       }
       case 'LdaConstant': {
         const [const_index] = [instruction[1][0]];
 
-        machine.accumulators.a0.set(machine.constants[const_index]);
+        machine.registers.accumulator.set(machine.constants[const_index]);
         break;
       }
       case 'LdaGlobal': {
@@ -48,7 +54,7 @@ module.exports = function execute(machine, instructions) {
         ];
         const property = machine.constants[name_index];
 
-        machine.accumulators.a0.set(global[property]);
+        machine.registers.accumulator.set(global[property]);
         break;
       }
       case 'LdaNamedProperty': {
@@ -59,7 +65,7 @@ module.exports = function execute(machine, instructions) {
         ];
         const property = machine.constants[name_index];
 
-        machine.accumulators.a0.set(
+        machine.registers.accumulator.set(
           machine.registers[register].get()[property]
         );
         break;
@@ -78,7 +84,7 @@ module.exports = function execute(machine, instructions) {
           machine.registers[arg1Reg].get(),
         ];
 
-        machine.accumulators.a0.set(callee.call(thisArg, arg1));
+        machine.registers.accumulator.set(callee.call(thisArg, arg1));
         break;
       }
       default:

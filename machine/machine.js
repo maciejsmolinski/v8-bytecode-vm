@@ -1,14 +1,12 @@
 const Return = require('./return');
 
 module.exports = function Machine(
-  accumulators = {},
   registers = {},
   flags = {},
   ip,
   constants = []
 ) {
   const state = {
-    accumulators,
     registers,
     flags,
     constants,
