@@ -84,6 +84,14 @@ module.exports = function execute(machine, instructions) {
         machine.registers.accumulator.set(machine.constants[const_index]);
         break;
       }
+      case 'Ldar': {
+        const register = instruction[1];
+
+        debug.explain(`registers.accumulator := registers.${register}`);
+
+        machine.registers.accumulator.set(machine.registers[register].get());
+        break;
+      }
       case 'LdaGlobal': {
         const name_index = instruction[1][0]; // immediate value
         const property = machine.constants[name_index];

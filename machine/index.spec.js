@@ -80,6 +80,21 @@ describe('Virtual Machine', () => {
       });
     });
 
+    describe('Ldar reg', () => {
+      it("loads register's value into accumulator", () => {
+        const instructions = [
+          ['LdaSmi', [10]],
+          ['Star1'],
+          ['LdaZero'],
+          ['Ldar', 'r1'],
+        ];
+
+        const result = execute(instructions).inspect();
+
+        expect(result).toHaveProperty('registers.accumulator', 10);
+      });
+    });
+
     describe.each([
       ['Star0', 'r0'],
       ['Star1', 'r1'],
@@ -168,6 +183,5 @@ describe('Virtual Machine', () => {
     });
 
     test.todo('`JumpIfFalse [addr]`');
-    test.todo('`Ldar a`');
   });
 });
