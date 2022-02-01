@@ -182,6 +182,9 @@ describe('Virtual Machine', () => {
       });
     });
 
-    test.todo('`JumpIfFalse [addr]`');
+    test.todo('JumpIfFalse [addr]');
+    test.todo('CreateClosure [addr_const_idx] [_] #flag');
+    test.todo('CallUndefinedReceiver r0, r2-r4, [0] [addr]');
+    test.todo('LdaUndefined');
   });
 });
