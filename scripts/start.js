@@ -1,8 +1,10 @@
 const build = require('../machine');
 
 const instructions = [
+  ['LdaSmi', [6]],
+  ['Star0'],
   ['LdaZero'],
-  ['TestLessThan', 'a0', [0]],
+  ['TestLessThan', 'r0', [0]],
   ['LdaGlobal', [0], [1]],
   ['Star0'],
   ['LdaNamedProperty', 'r0', [1], [3]],
