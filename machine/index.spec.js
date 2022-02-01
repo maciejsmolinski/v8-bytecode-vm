@@ -93,6 +93,18 @@ describe('Virtual Machine', () => {
       });
     });
 
+    describe('MulSmi [imm] [_]', () => {
+      it('multiplies value in the accumulator by small int', () => {
+        const instructions = [
+          ['LdaSmi', [6]],
+          ['MulSmi', [5], [0]],
+        ];
+        const result = execute(instructions).inspect();
+
+        expect(result).toHaveProperty('registers.accumulator', 30);
+      });
+    });
+
     describe('TestLessThan reg [_]', () => {
       it.each([
         [true, -6, 'lower than'],
@@ -157,6 +169,5 @@ describe('Virtual Machine', () => {
 
     test.todo('`JumpIfFalse [addr]`');
     test.todo('`Ldar a`');
-    test.todo('`MulSmi [x] [y]`');
   });
 });

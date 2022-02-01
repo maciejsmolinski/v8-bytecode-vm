@@ -34,6 +34,14 @@ module.exports = function execute(machine, instructions) {
         machine.return.set(machine.registers.accumulator.get());
         break;
       }
+      case 'MulSmi': {
+        const value = instruction[1][0]; // Immediate value
+
+        machine.registers.accumulator.set(
+          machine.registers.accumulator.get() * value
+        );
+        break;
+      }
       case 'TestLessThan': {
         const first = instruction[1];
         const second = instruction[2][0]; // Immediate value
