@@ -68,6 +68,7 @@ Bytecode Age: 0
 
 ```bash
 $ make start
+[DEBUG] OP [ 'Jump', [ 3 ] ]
 [DEBUG] OP [ 'LdaZero' ]
 [DEBUG] OP [ 'LdaGlobal', [ 0 ], [ 1 ] ]
 [DEBUG] OP [ 'Star0' ]
@@ -93,8 +94,8 @@ $ make start
     a2: undefined
   },
   flags: { boolean: false },
-  constants: [ 'console', 'log', '•• Hello World ••' ],
-  ip: 13,
+  constants: [ 'console', 'log', '•• Hello World ••', 1 ],
+  ip: 14,
   return: 30
 }
 ```

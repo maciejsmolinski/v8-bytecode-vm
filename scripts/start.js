@@ -1,6 +1,7 @@
 const build = require('../machine');
 
 const instructions = [
+  ['Jump', [3]],
   ['LdaZero'],
   ['LdaGlobal', [0], [1]],
   ['Star0'],
@@ -16,6 +17,6 @@ const instructions = [
   ['Return'],
 ];
 
-const constants = ['console', 'log', '•• Hello World ••'];
+const constants = ['console', 'log', '•• Hello World ••', 1];
 
 build(constants)(instructions);

@@ -6,10 +6,11 @@ const debug = {
 };
 
 module.exports = function execute(machine, instructions) {
-  let pointer = machine.ip.set(0);
-  let instruction = instructions[pointer];
+  machine.ip.set(0);
 
-  while (instruction) {
+  let instruction;
+
+  while ((instruction = instructions[machine.ip.get()])) {
     debug.op(instruction);
 
     switch (instruction[0]) {
@@ -141,12 +142,20 @@ module.exports = function execute(machine, instructions) {
         machine.registers.accumulator.set(callee.call(thisArg, arg1));
         break;
       }
+      case 'Jump': {
+        const const_index = instruction[1][0];
+        const address = machine.constants[const_index];
+
+        debug.explain(`ip := constants[${const_index}] (${address})`);
+
+        machine.ip.set(address);
+        continue;
+      }
       default:
         break;
     }
 
-    machine.ip.set(++pointer);
-    instruction = instructions[pointer];
+    machine.ip.set(machine.ip.get() + 1);
   }
 
   debug.state(machine.inspect());

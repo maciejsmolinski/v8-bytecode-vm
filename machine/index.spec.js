@@ -191,6 +191,24 @@ describe('Virtual Machine', () => {
       });
     });
 
+    describe('Jump [addr_const_index]', () => {
+      constants = [3]; // instruction address / index
+      execute = buildMachine(constants);
+
+      it('unconditionally jumps to the instruction at the address stored in the given const', () => {
+        const instructions = [
+          ['Jump', [0]],
+          ['LdaSmi', [5]],
+          ['Star0'],
+          ['LdaZero'],
+          ['Star1'],
+        ];
+        const result = execute(instructions).inspect();
+
+        expect(result).not.toHaveProperty(`registers.r0`, 5);
+      });
+    });
+
     test.todo('JumpIfFalse [addr]');
     test.todo('CreateClosure [addr_const_idx] [_] #flag');
     test.todo('CallUndefinedReceiver r0, r2-r4, [0] [addr]');
