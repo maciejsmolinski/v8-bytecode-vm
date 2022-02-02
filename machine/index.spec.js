@@ -192,10 +192,10 @@ describe('Virtual Machine', () => {
     });
 
     describe('Jump [addr_const_index]', () => {
-      constants = [3]; // instruction address / index
-      execute = buildMachine(constants);
-
       it('unconditionally jumps to the instruction at the address stored in the given const', () => {
+        constants = [3]; // instruction address / index
+        execute = buildMachine(constants);
+
         const instructions = [
           ['Jump', [0]],
           ['LdaSmi', [5]],
@@ -209,7 +209,50 @@ describe('Virtual Machine', () => {
       });
     });
 
-    test.todo('JumpIfFalse [addr]');
+    describe('JumpIfFalse [addr_const_index]', () => {
+      it('jumps to the address stored in the given const when flags.boolean is false', () => {
+        constants = [7]; // instruction address / index
+        execute = buildMachine(constants);
+
+        // prettier-ignore
+        const instructions = [
+          ['LdaSmi', [5]],             // accumulator := 5
+          ['Star0'],                   // r0 := accumulator = 5
+          ['LdaZero'],                 // accumulator := 0
+          ['TestLessThan', 'r0', [0]], // flags.boolean := r0 < accumulator = 5 < 0 = false
+          ['JumpIfFalse', [0]],        // JUMP to instruction at address constants[0] (7)
+          ['LdaSmi', [10]],            // [skips] accumulator := 10
+          ['Star1'],                   // [skips] r1 := 10
+          ['LdaZero'],                 // [jumps here] accumulator := 0
+        ];
+
+        const result = execute(instructions).inspect();
+
+        expect(result).not.toHaveProperty(`registers.r1`, 10);
+      });
+
+      it('ignores jump to the address stored in the given const when flags.boolean is NOT false', () => {
+        constants = [7]; // instruction address / index
+        execute = buildMachine(constants);
+
+        // prettier-ignore
+        const instructions = [
+          ['LdaSmi', [-5]],            // accumulator := -5
+          ['Star0'],                   // r0 := accumulator = 5
+          ['LdaZero'],                 // accumulator := 0
+          ['TestLessThan', 'r0', [0]], // flags.boolean := r0 < accumulator = -5 < 0 = true
+          ['JumpIfFalse', [0]],        // [ignores] JUMP to instruction at address constants[0] (7)
+          ['LdaSmi', [10]],            // accumulator := 10
+          ['Star1'],                   // r1 := 10
+          ['LdaZero'],                 // accumulator := 0
+        ];
+
+        const result = execute(instructions).inspect();
+
+        expect(result).toHaveProperty(`registers.r1`, 10);
+      });
+    });
+
     test.todo('CreateClosure [addr_const_idx] [_] #flag');
     test.todo('CallUndefinedReceiver r0, r2-r4, [0] [addr]');
   });

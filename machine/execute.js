@@ -146,7 +146,28 @@ module.exports = function execute(machine, instructions) {
         const const_index = instruction[1][0];
         const address = machine.constants[const_index];
 
-        debug.explain(`ip := constants[${const_index}] (${address})`);
+        debug.explain(
+          `[jump] ip := constants[${const_index}] (${address}) [Jump]`
+        );
+
+        machine.ip.set(address);
+        continue;
+      }
+      case 'JumpIfFalse': {
+        const const_index = instruction[1][0];
+        const address = machine.constants[const_index];
+
+        if (machine.flags.boolean.get() !== false) {
+          debug.explain(
+            `[skip] ip := constants[${const_index}] (${address}) [JumpIfFalse, ${machine.flags.boolean.get()}]`
+          );
+
+          break;
+        }
+
+        debug.explain(
+          `[jump] ip := constants[${const_index}] (${address}) [JumpIfFalse, ${machine.flags.boolean.get()}]`
+        );
 
         machine.ip.set(address);
         continue;
