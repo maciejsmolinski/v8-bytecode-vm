@@ -21,6 +21,12 @@ Install dependencies with `make install` and execute
 $ make test # or make tdd
 ```
 
+Running tests with high verbosity logs from executor
+
+```bash
+$ EXPLAIN=1 DEBUG=1 make test # or make tdd
+```
+
 ## Generating bytecode
 
 Generate `.bytecode` file for each javascript file in the `examples/` directory
