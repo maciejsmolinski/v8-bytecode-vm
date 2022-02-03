@@ -172,6 +172,20 @@ module.exports = function execute(machine, instructions) {
         machine.ip.set(address);
         continue;
       }
+      case 'CallUndefinedReceiver': {
+        const params_register = instruction[2];
+        const const_index = instruction[3][0];
+        const address = machine.constants[const_index];
+
+        debug.explain(`registers.a0 := registers.${params_register}`);
+        debug.explain(
+          `[jump] ip := constants[${const_index}] (${address}) [CallUndefinedReceiver]`
+        );
+
+        machine.registers.a0.set(machine.registers[params_register].get());
+        machine.ip.set(address);
+        continue;
+      }
       default:
         break;
     }

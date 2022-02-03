@@ -253,7 +253,40 @@ describe('Virtual Machine', () => {
       });
     });
 
+    describe('CallUndefinedReceiver reg(closure), regOrRegRange(params), [addr_const_index]', () => {
+      test.todo('Call stores instruction pointer for return');
+      test.todo(
+        "Return sets accumulator's value and jumps back to the previously set address"
+      );
+
+      describe('when provided single param', () => {
+        it("sets a0 to param's value and jumps to the function at the provided address", () => {
+          const param = 11;
+          constants = [4 /* functionStart */, 6 /* done */];
+          execute = buildMachine(constants);
+
+          // prettier-ignore
+          const instructions = [
+            // Caller
+            ['LdaSmi', [param]],                        // accumulator := 11
+            ['Star1'],                                  // r1 := accumulator = 11
+            ['CallUndefinedReceiver', 'r0', 'r1', [0]], // call (save params & jump)
+
+            ['Jump', [1]],                              // Check: If this line gets executed, the test will fail
+
+            // Callee
+            ['Ldar', 'a0'],                             // accumulator := a0 = 11
+            ['Star0'],                                  // r0 := accumulator = 11
+            ['LdaZero']                                 // accumulator = 0
+          ];
+
+          const result = execute(instructions).inspect();
+
+          expect(result).toHaveProperty(`registers.r0`, param);
+        });
+      });
+    });
+
     test.todo('CreateClosure [addr_const_idx] [_] #flag');
-    test.todo('CallUndefinedReceiver r0, r2-r4, [0] [addr]');
   });
 });
