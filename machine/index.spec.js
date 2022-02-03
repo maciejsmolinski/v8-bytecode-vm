@@ -285,6 +285,38 @@ describe('Virtual Machine', () => {
           expect(result).toHaveProperty(`registers.r0`, param);
         });
       });
+
+      describe('when provided param range', () => {
+        it("sets a0-aN to params' values and jumps to the function at the provided address", () => {
+          const params = [22, 33];
+          constants = [6 /* functionStart */, 10 /* done */];
+          execute = buildMachine(constants);
+
+          // prettier-ignore
+          const instructions = [
+            // Caller
+            ['LdaSmi', [params[0]]],                       // accumulator := 22
+            ['Star1'],                                     // r1 := accumulator = 22
+            ['LdaSmi', [params[1]]],                       // accumulator := 33
+            ['Star2'],                                     // r2 := accumulator = 33
+            ['CallUndefinedReceiver', 'r0', 'r1-r2', [0]], // call (save params & jump)
+
+            ['Jump', [1]],                                 // Check: If this line gets executed, the test will fail
+
+            // Callee
+            ['Ldar', 'a0'],                                // accumulator := a0 = 22
+            ['Star0'],                                     // r0 := accumulator = 22
+            ['Ldar', 'a1'],                                // accumulator := a1 = 33
+            ['Star1'],                                     // r1 := accumulator = 33
+            ['LdaZero']                                    // accumulator = 0
+          ];
+
+          const result = execute(instructions).inspect();
+
+          expect(result).toHaveProperty(`registers.r0`, params[0]);
+          expect(result).toHaveProperty(`registers.r1`, params[1]);
+        });
+      });
     });
 
     test.todo('CreateClosure [addr_const_idx] [_] #flag');

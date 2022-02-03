@@ -1,4 +1,4 @@
-const { debug: d } = require('./utils');
+const { debug: d, registers: r } = require('./utils');
 const debug = {
   op: (...args) => !process.env.EXPLAIN && d('OP', ...args),
   explain: (...args) => process.env.EXPLAIN && d('EX', ...args),
@@ -177,12 +177,30 @@ module.exports = function execute(machine, instructions) {
         const const_index = instruction[3][0];
         const address = machine.constants[const_index];
 
-        debug.explain(`registers.a0 := registers.${params_register}`);
+        let registers;
+
+        try {
+          registers = r.range(params_register);
+        } catch (e) {
+          throw new Error(
+            'CallUndefinedReceiver failed to understand registers range',
+            params_register
+          );
+        }
+
+        registers.forEach((register, index) => {
+          const register_number = register.slice(1); // r0 -> 0, r2 -> 2
+
+          debug.explain(`registers.a${index} := registers.r${register_number}`);
+          machine.registers[`a${index}`].set(
+            machine.registers[`r${register_number}`].get()
+          );
+        });
+
         debug.explain(
           `[jump] ip := constants[${const_index}] (${address}) [CallUndefinedReceiver]`
         );
 
-        machine.registers.a0.set(machine.registers[params_register].get());
         machine.ip.set(address);
         continue;
       }
