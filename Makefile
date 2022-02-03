@@ -2,7 +2,7 @@ SOURCES=$(wildcard examples/*.js)
 OUTPUTS=$(subst js,bytecode,$(SOURCES))
 
 examples/%.bytecode: examples/%.js
-	@ node --print-bytecode --print-bytecode-filter=main $< > $@
+	@ node --print-bytecode $< > $@
 	@ echo "✓ Generated" $@
 
 default: $(OUTPUTS)

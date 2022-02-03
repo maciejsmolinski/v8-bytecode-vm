@@ -1,22 +1,51 @@
 const build = require('../machine');
 
-const instructions = [
-  ['Jump', [3]],
-  ['LdaZero'],
-  ['LdaGlobal', [0], [1]],
+const main = [
+  ['CreateClosure', [0], [0], '#2'],
   ['Star0'],
-  ['LdaNamedProperty', 'r0', [1], [3]],
-  ['Star1'],
-  ['LdaConstant', [2]],
+  ['LdaSmi', [-5]],
   ['Star2'],
-  ['CallProperty1', 'r1', 'r0', 'r2', [5]],
-  ['LdaSmi', [6]],
-  ['Star0'],
-  ['TestLessThan', 'r0', [0]],
-  ['MulSmi', [5], [0]],
+  ['CallUndefinedReceiver1', 'r0', 'r2', [4]],
+  ['LdaUndefined'],
   ['Return'],
 ];
 
-const constants = ['console', 'log', '•• Hello World ••', 1];
+const earlyReturn = [
+  ['LdaZero'],
+  ['TestLessThan', 'a0', [0]],
+  ['JumpIfFalse', [5]],
+  ['LdaGlobal', [0], [1]],
+  ['Star1'],
+  ['LdaNamedProperty', 'r1', [1], [3]],
+  ['Star0'],
+  ['LdaConstant', [2]],
+  ['Star2'],
+  ['CallProperty1', 'r0', 'r1', 'r2', [5]],
+  ['Ldar', 'a0'],
+  ['MulSmi', [-1], [7]],
+  ['Return'], // @TODO: jump back
+  ['LdaGlobal', [0], [1]],
+  ['Star1'],
+  ['LdaNamedProperty', 'r1', [1], [3]],
+  ['Star0'],
+  ['LdaConstant', [3]],
+  ['Star2'],
+  ['CallProperty1', 'r0', 'r1', 'r2', [8]],
+  ['Ldar', 'a0'],
+  ['Return'], // @TODO: jump back
+];
+
+const mainConstants = [main.length + 11];
+
+const earlyReturnConstants = [
+  'console',
+  'log',
+  'Less than zero',
+  'Zero or more',
+  main.length,
+];
+
+const instructions = [...main, ...earlyReturn];
+const constants = [...earlyReturnConstants, ...mainConstants];
 
 build(constants)(instructions);

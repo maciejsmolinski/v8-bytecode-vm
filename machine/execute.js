@@ -1,6 +1,6 @@
 const { debug: d, registers: r } = require('./utils');
 const debug = {
-  op: (...args) => !process.env.EXPLAIN && d('OP', ...args),
+  op: (...args) => d('OP', ...args),
   explain: (...args) => process.env.EXPLAIN && d('EX', ...args),
   state: (...args) => d('ST', ...args),
 };
@@ -81,6 +81,8 @@ module.exports = function execute(machine, instructions) {
           machine.registers[register].get() <
             machine.registers.accumulator.get()
         );
+
+        debug.state(machine.inspect());
         break;
       }
       case 'LdaConstant': {
@@ -93,6 +95,7 @@ module.exports = function execute(machine, instructions) {
       }
       case 'Ldar': {
         const register = instruction[1];
+        console.log(machine.inspect());
 
         debug.explain(`registers.accumulator := registers.${register}`);
 
@@ -171,7 +174,8 @@ module.exports = function execute(machine, instructions) {
         machine.ip.set(address);
         continue;
       }
-      case 'CallUndefinedReceiver': {
+      case 'CallUndefinedReceiver':
+      case 'CallUndefinedReceiver1': {
         const paramsRegister = instruction[2];
         const constIndex = instruction[3][0];
         const address = machine.constants[constIndex];

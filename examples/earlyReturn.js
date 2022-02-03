@@ -1,7 +1,7 @@
 /**
  * A naive implementation of Math.abs(x);
  */
-function main(a) {
+function earlyReturn(a) {
   if (a < 0) {
     console.log('Less than zero');
     return a * -1;
@@ -11,4 +11,4 @@ function main(a) {
   return a;
 }
 
-main(5);
+earlyReturn(5);

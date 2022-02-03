@@ -209,6 +209,7 @@ describe('Virtual Machine', () => {
       });
     });
 
+    // @TODO: Second param is an immediate value
     describe('JumpIfFalse [addr_const_index]', () => {
       it('jumps to the address stored in the given const when flags.boolean is false', () => {
         constants = [7]; // instruction address / index
