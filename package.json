@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/maciejsmolinski/v8-bytecode-vm#readme",
   "devDependencies": {
+    "eslint": "^8.8.0",
     "jest": "^27.4.7"
   }
 }
