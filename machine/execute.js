@@ -204,11 +204,16 @@ module.exports = function execute(machine, instructions) {
           );
         });
 
+        const ip = machine.ip.get();
+
+        debug.explain(`stack.push(ip) (${ip})`);
+
+        machine.stack.push(ip);
+
         debug.explain(
           `[jump] ip := constants[${constIndex}] (${address}) [CallUndefinedReceiver]`
         );
 
-        machine.stack.push(machine.ip.get());
         machine.ip.set(address);
         continue;
       }
