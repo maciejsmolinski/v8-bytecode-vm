@@ -1,4 +1,5 @@
 const Return = require('./return');
+const Stack = require('./stack');
 
 module.exports = function Machine(
   registers = {},
@@ -11,6 +12,7 @@ module.exports = function Machine(
     flags,
     constants,
     ip,
+    stack: Stack(),
     return: Return(),
   };
 
