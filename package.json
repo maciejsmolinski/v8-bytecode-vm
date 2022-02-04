@@ -7,7 +7,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "lint:js": "eslint machine",
-    "prettier:fix": "prettier machine --write"
+    "lint:js:fix": "eslint --fix machine",
+    "prettier:fix": "prettier --write machine/**/*.js"
   },
   "repository": {
     "type": "git",
