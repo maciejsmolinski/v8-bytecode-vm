@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch"
+    "test:watch": "jest --watch",
+    "lint:js": "eslint machine",
+    "prettier:fix": "prettier machine --write"
   },
   "repository": {
     "type": "git",
