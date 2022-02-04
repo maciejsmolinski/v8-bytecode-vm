@@ -195,10 +195,10 @@ describe('Virtual Machine', () => {
         machine.stack.push(0);
         machine.stack.push(1);
         machine.stack.push(2);
-        expect(machine.inspect()).toHaveProperty(`stack`, [0, 1, 2]);
+        expect(machine.inspect()).toHaveProperty('stack', [0, 1, 2]);
 
         execute([['LdaZero'], ['Return'], ['LdaZero']]);
-        expect(machine.inspect()).toHaveProperty(`stack`, [0, 1]);
+        expect(machine.inspect()).toHaveProperty('stack', [0, 1]);
       });
     });
 
