@@ -20,6 +20,9 @@ test:
 tdd:
 	@ npm run test:watch
 
+lint:
+	@ npm run lint:js
+
 start:
 	@ DEBUG=1 node scripts/start.js
 
