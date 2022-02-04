@@ -23,7 +23,7 @@ const earlyReturn = [
   ['CallProperty1', 'r0', 'r1', 'r2', [5]],
   ['Ldar', 'a0'],
   ['MulSmi', [-1], [7]],
-  ['Return'], // @TODO: jump back
+  ['Return'],
   ['LdaGlobal', [0], [1]],
   ['Star1'],
   ['LdaNamedProperty', 'r1', [1], [3]],
@@ -32,7 +32,7 @@ const earlyReturn = [
   ['Star2'],
   ['CallProperty1', 'r0', 'r1', 'r2', [8]],
   ['Ldar', 'a0'],
-  ['Return'], // @TODO: jump back
+  ['Return'],
 ];
 
 const mainConstants = [main.length + 11];
