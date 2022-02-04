@@ -60,7 +60,7 @@ module.exports = function execute(machine, instructions) {
         const ip = machine.stack.pop();
         debug.explain(`[jump] ip := stack.pop() (${ip}) [Return]`);
 
-        machine.ip.set(machine.stack.pop());
+        machine.ip.set(ip + 1);
         continue;
       }
       case 'MulSmi': {
