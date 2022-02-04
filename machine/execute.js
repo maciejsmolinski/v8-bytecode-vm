@@ -56,7 +56,12 @@ module.exports = function execute(machine, instructions) {
         debug.explain('machine.return := registers.accumulator');
 
         machine.return.set(machine.registers.accumulator.get());
-        break;
+
+        const ip = machine.stack.pop();
+        debug.explain(`[jump] ip := stack.pop() (${ip}) [Return]`);
+
+        machine.ip.set(machine.stack.pop());
+        continue;
       }
       case 'MulSmi': {
         const value = instruction[1][0]; // Immediate value
@@ -95,7 +100,6 @@ module.exports = function execute(machine, instructions) {
       }
       case 'Ldar': {
         const register = instruction[1];
-        console.log(machine.inspect());
 
         debug.explain(`registers.accumulator := registers.${register}`);
 
@@ -204,6 +208,7 @@ module.exports = function execute(machine, instructions) {
           `[jump] ip := constants[${constIndex}] (${address}) [CallUndefinedReceiver]`
         );
 
+        machine.stack.push(machine.ip.get());
         machine.ip.set(address);
         continue;
       }
