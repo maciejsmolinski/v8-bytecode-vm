@@ -84,11 +84,11 @@ module.exports = function execute(machine, instructions) {
         break;
       }
       case 'LdaConstant': {
-        const [const_index] = [instruction[1][0]];
+        const [constIndex] = [instruction[1][0]];
 
-        debug.explain(`registers.accumulator := constants[${const_index}]`);
+        debug.explain(`registers.accumulator := constants[${constIndex}]`);
 
-        machine.registers.accumulator.set(machine.constants[const_index]);
+        machine.registers.accumulator.set(machine.constants[constIndex]);
         break;
       }
       case 'Ldar': {
@@ -100,17 +100,17 @@ module.exports = function execute(machine, instructions) {
         break;
       }
       case 'LdaGlobal': {
-        const name_index = instruction[1][0]; // immediate value
-        const property = machine.constants[name_index];
+        const nameIndex = instruction[1][0]; // immediate value
+        const property = machine.constants[nameIndex];
 
-        debug.explain(`registers.accumulator := constants[${name_index}]`);
+        debug.explain(`registers.accumulator := constants[${nameIndex}]`);
 
         machine.registers.accumulator.set(global[property]);
         break;
       }
       case 'LdaNamedProperty': {
-        const [register, name_index] = [instruction[1], instruction[2][0]];
-        const property = machine.constants[name_index];
+        const [register, nameIndex] = [instruction[1], instruction[2][0]];
+        const property = machine.constants[nameIndex];
 
         debug.explain(
           `registers.accumulator := machine.registers.${register}[${property}]`
@@ -122,11 +122,10 @@ module.exports = function execute(machine, instructions) {
         break;
       }
       case 'CallProperty1': {
-        const [calleeReg, thisArgReg, arg1Reg, feedback_slot_index] = [
+        const [calleeReg, thisArgReg, arg1Reg] = [
           instruction[1],
           instruction[2],
           instruction[3],
-          instruction[4][0],
         ];
 
         const [callee, thisArg, arg1] = [
@@ -143,62 +142,62 @@ module.exports = function execute(machine, instructions) {
         break;
       }
       case 'Jump': {
-        const const_index = instruction[1][0];
-        const address = machine.constants[const_index];
+        const constIndex = instruction[1][0];
+        const address = machine.constants[constIndex];
 
         debug.explain(
-          `[jump] ip := constants[${const_index}] (${address}) [Jump]`
+          `[jump] ip := constants[${constIndex}] (${address}) [Jump]`
         );
 
         machine.ip.set(address);
         continue;
       }
       case 'JumpIfFalse': {
-        const const_index = instruction[1][0];
-        const address = machine.constants[const_index];
+        const constIndex = instruction[1][0];
+        const address = machine.constants[constIndex];
 
         if (machine.flags.boolean.get() !== false) {
           debug.explain(
-            `[skip] ip := constants[${const_index}] (${address}) [JumpIfFalse, ${machine.flags.boolean.get()}]`
+            `[skip] ip := constants[${constIndex}] (${address}) [JumpIfFalse, ${machine.flags.boolean.get()}]`
           );
 
           break;
         }
 
         debug.explain(
-          `[jump] ip := constants[${const_index}] (${address}) [JumpIfFalse, ${machine.flags.boolean.get()}]`
+          `[jump] ip := constants[${constIndex}] (${address}) [JumpIfFalse, ${machine.flags.boolean.get()}]`
         );
 
         machine.ip.set(address);
         continue;
       }
       case 'CallUndefinedReceiver': {
-        const params_register = instruction[2];
-        const const_index = instruction[3][0];
-        const address = machine.constants[const_index];
+        const paramsRegister = instruction[2];
+        const constIndex = instruction[3][0];
+        const address = machine.constants[constIndex];
 
         let registers;
 
         try {
-          registers = r.range(params_register);
+          registers = r.range(paramsRegister);
         } catch (e) {
           throw new Error(
             'CallUndefinedReceiver failed to understand registers range',
-            params_register
+            paramsRegister
           );
         }
 
         registers.forEach((register, index) => {
-          const register_number = register.slice(1); // r0 -> 0, r2 -> 2
+          const registerNumber = register.slice(1); // r0 -> 0, r2 -> 2
 
-          debug.explain(`registers.a${index} := registers.r${register_number}`);
+          debug.explain(`registers.a${index} := registers.r${registerNumber}`);
           machine.registers[`a${index}`].set(
-            machine.registers[`r${register_number}`].get()
+            machine.registers[`r${registerNumber}`].get()
           );
         });
 
         debug.explain(
-          `[jump] ip := constants[${const_index}] (${address}) [CallUndefinedReceiver]`
+          `[jump] ip := constants[${constIndex}] (${address}) [CallUndefinedReceiver]`
         );
 
         machine.ip.set(address);

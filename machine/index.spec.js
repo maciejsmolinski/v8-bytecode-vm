@@ -136,7 +136,7 @@ describe('Virtual Machine', () => {
         [false, 6, 'bigger than'],
       ])(
         "sets flags.boolean to %s when register's value (%s) is %s accumulator's value (0)",
-        (flag, value, _) => {
+        (flag, value) => {
           const instructions = [
             ['LdaSmi', [value]],
             ['Star0'],
