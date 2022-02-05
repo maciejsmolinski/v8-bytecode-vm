@@ -78,16 +78,15 @@ module.exports = function execute(machine, instructions) {
       case 'TestLessThan': {
         const register = instruction[1];
 
-        debug.explain(
-          `flags.boolean := registers.${register} < registers.accumulator`
-        );
-
-        machine.flags.boolean.set(
+        const result =
           machine.registers[register].get() <
-            machine.registers.accumulator.get()
+          machine.registers.accumulator.get();
+
+        debug.explain(
+          `flags.boolean := registers.${register} < registers.accumulator (${result})`
         );
 
-        debug.state(machine.inspect());
+        machine.flags.boolean.set(result);
         break;
       }
       case 'LdaConstant': {
