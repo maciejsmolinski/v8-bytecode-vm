@@ -57,10 +57,10 @@ module.exports = function execute(machine, instructions) {
 
         machine.return.set(machine.registers.accumulator.get());
 
-        const ip = machine.stack.pop();
+        const ip = machine.stack.pop() || null;
         debug.explain(`[jump] ip := stack.pop() (${ip}) [Return]`);
 
-        machine.ip.set(ip + 1);
+        machine.ip.set(ip ? ip + 1 : null);
         continue;
       }
       case 'MulSmi': {
