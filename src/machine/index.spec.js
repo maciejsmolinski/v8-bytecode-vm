@@ -1,4 +1,3 @@
-const { expect } = require('@jest/globals');
 const buildMachine = require('./');
 
 describe('Virtual Machine', () => {

@@ -1,4 +1,4 @@
-const { debug: d, registers: r } = require('./utils');
+const { debug: d, registers: r } = require('../utils');
 const debug = {
   op: (...args) => d('OP', ...args),
   explain: (...args) => process.env.EXPLAIN && d('EX', ...args),

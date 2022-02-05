@@ -1,4 +1,4 @@
-const build = require('../machine');
+const build = require('../src/machine');
 
 // Invokes early return
 const main = [
