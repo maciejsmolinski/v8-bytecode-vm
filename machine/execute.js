@@ -40,16 +40,27 @@ module.exports = function execute(machine, instructions) {
         machine.registers.r0.set(machine.registers.accumulator.get());
         break;
       }
-      case 'Star1': {
-        debug.explain('registers.r1 := registers.accumulator');
+      case 'Star1':
+      case 'Star2':
+      case 'Star3':
+      case 'Star4':
+      case 'Star5':
+      case 'Star6':
+      case 'Star7':
+      case 'Star8':
+      case 'Star9':
+      case 'Star10':
+      case 'Star11':
+      case 'Star12':
+      case 'Star13':
+      case 'Star14':
+      case 'Star15': {
+        const registerName = instruction[0].slice(3);
+        debug.explain(`registers.${registerName} := registers.accumulator`);
 
-        machine.registers.r1.set(machine.registers.accumulator.get());
-        break;
-      }
-      case 'Star2': {
-        debug.explain('registers.r2 := registers.accumulator');
-
-        machine.registers.r2.set(machine.registers.accumulator.get());
+        machine.registers[registerName].set(
+          machine.registers.accumulator.get()
+        );
         break;
       }
       case 'Return': {

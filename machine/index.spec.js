@@ -108,6 +108,19 @@ describe('Virtual Machine', () => {
       ['Star0', 'r0'],
       ['Star1', 'r1'],
       ['Star2', 'r2'],
+      ['Star3', 'r3'],
+      ['Star4', 'r4'],
+      ['Star5', 'r5'],
+      ['Star6', 'r6'],
+      ['Star7', 'r7'],
+      ['Star8', 'r8'],
+      ['Star9', 'r9'],
+      ['Star10', 'r10'],
+      ['Star11', 'r11'],
+      ['Star12', 'r12'],
+      ['Star13', 'r13'],
+      ['Star14', 'r14'],
+      ['Star15', 'r15'],
     ])('%s', (instruction, register) => {
       it(`loads accumulator's value into register ${register}`, () => {
         const instructions = [['LdaZero'], [instruction]];
