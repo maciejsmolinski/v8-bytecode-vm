@@ -34,12 +34,7 @@ module.exports = function execute(machine, instructions) {
         machine.registers.accumulator.set(undefined);
         break;
       }
-      case 'Star0': {
-        debug.explain('registers.r0 := registers.accumulator');
-
-        machine.registers.r0.set(machine.registers.accumulator.get());
-        break;
-      }
+      case 'Star0':
       case 'Star1':
       case 'Star2':
       case 'Star3':
