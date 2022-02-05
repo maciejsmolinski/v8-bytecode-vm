@@ -35,7 +35,7 @@ const earlyReturn = [
   ['Return'],
 ];
 
-const mainConstants = [main.length + 11];
+const mainConstants = [main.length + 13];
 
 const earlyReturnConstants = [
   'console',
