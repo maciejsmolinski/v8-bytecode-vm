@@ -54,13 +54,10 @@ module.exports = function execute(machine, instructions) {
       }
       case 'Return': {
         const ip = machine.stack.pop();
-        const target = ip ? ip + 1 : null;
+        const target = typeof ip !== 'undefined' ? ip + 1 : null;
 
-        if (target) {
-          debug.explain('machine.return := registers.accumulator');
-
-          machine.return.set(machine.registers.accumulator.get());
-        }
+        debug.explain('machine.return := registers.accumulator');
+        machine.return.set(machine.registers.accumulator.get());
 
         debug.explain(`[jump] ip := stack.pop() (${target}) [Return]`);
 
