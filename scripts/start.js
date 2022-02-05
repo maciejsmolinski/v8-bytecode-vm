@@ -1,15 +1,17 @@
 const build = require('../machine');
 
+// Invokes early return
 const main = [
   ['CreateClosure', [0], [0], '#2'],
   ['Star0'],
-  ['LdaSmi', [-5]],
+  ['LdaSmi', [-123]], // <-- param's value
   ['Star2'],
   ['CallUndefinedReceiver1', 'r0', 'r2', [4]],
   ['LdaUndefined'],
   ['Return'],
 ];
 
+// Early return's definition
 const earlyReturn = [
   ['LdaZero'],
   ['TestLessThan', 'a0', [0]],
