@@ -53,12 +53,14 @@ module.exports = function execute(machine, instructions) {
         break;
       }
       case 'Return': {
-        debug.explain('machine.return := registers.accumulator');
-
-        machine.return.set(machine.registers.accumulator.get());
-
         const ip = machine.stack.pop();
         const target = ip ? ip + 1 : null;
+
+        if (target) {
+          debug.explain('machine.return := registers.accumulator');
+
+          machine.return.set(machine.registers.accumulator.get());
+        }
 
         debug.explain(`[jump] ip := stack.pop() (${target}) [Return]`);
 
