@@ -4,9 +4,15 @@ const build = require('../machine');
 const main = [
   ['CreateClosure', [0], [0], '#2'],
   ['Star0'],
-  ['LdaSmi', [-123]], // <-- param's value
+  ['LdaGlobal', [5 + 1], [0]],
   ['Star2'],
-  ['CallUndefinedReceiver1', 'r0', 'r2', [4]],
+  ['LdaNamedProperty', 'r2', [5 + 2], [2]],
+  ['Star1'],
+  ['LdaSmi', [-123]], // <-- param's value
+  ['Star4'],
+  ['CallUndefinedReceiver1', 'r1', 'r4', [5]],
+  ['Star3'],
+  ['CallProperty1', 'r0', 'r2', 'r3', [6]],
   ['LdaUndefined'],
   ['Return'],
 ];
@@ -37,8 +43,8 @@ const earlyReturn = [
   ['Return'],
 ];
 
-const mainConstants = [main.length + 13];
-
+const instructions = [...main, ...earlyReturn];
+const mainConstants = [main.length + 13, 'console', 'log'];
 const earlyReturnConstants = [
   'console',
   'log',
@@ -46,8 +52,6 @@ const earlyReturnConstants = [
   'Zero or more',
   main.length,
 ];
-
-const instructions = [...main, ...earlyReturn];
 const constants = [...earlyReturnConstants, ...mainConstants];
 
 build(constants)(instructions);
