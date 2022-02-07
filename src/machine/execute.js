@@ -1,9 +1,4 @@
-const { debug: d, registers: r } = require('../utils');
-const debug = {
-  op: (...args) => d('OP', ...args),
-  explain: (...args) => process.env.EXPLAIN && d('EX', ...args),
-  state: (...args) => d('ST', ...args),
-};
+const { logger, registers: r } = require('../utils');
 
 module.exports = function execute(machine, instructions) {
   machine.ip.set(0);
@@ -11,11 +6,11 @@ module.exports = function execute(machine, instructions) {
   let instruction;
 
   while ((instruction = instructions[machine.ip.get()])) {
-    debug.op(instruction);
+    logger.op(instruction);
 
     switch (instruction[0]) {
       case 'LdaZero': {
-        debug.explain('registers.accumulator := 0');
+        logger.explain('registers.accumulator := 0');
 
         machine.registers.accumulator.set(0);
         break;
@@ -23,13 +18,13 @@ module.exports = function execute(machine, instructions) {
       case 'LdaSmi': {
         const value = instruction[1][0]; // Immediate value
 
-        debug.explain('registers.accumulator := ' + value);
+        logger.explain('registers.accumulator := ' + value);
 
         machine.registers.accumulator.set(value);
         break;
       }
       case 'LdaUndefined': {
-        debug.explain('registers.accumulator := undefined');
+        logger.explain('registers.accumulator := undefined');
 
         machine.registers.accumulator.set(undefined);
         break;
@@ -51,7 +46,7 @@ module.exports = function execute(machine, instructions) {
       case 'Star14':
       case 'Star15': {
         const registerName = instruction[0].slice(3);
-        debug.explain(`registers.${registerName} := registers.accumulator`);
+        logger.explain(`registers.${registerName} := registers.accumulator`);
 
         machine.registers[registerName].set(
           machine.registers.accumulator.get()
@@ -62,10 +57,10 @@ module.exports = function execute(machine, instructions) {
         const ip = machine.stack.pop();
         const target = typeof ip !== 'undefined' ? ip + 1 : null;
 
-        debug.explain('machine.return := registers.accumulator');
+        logger.explain('machine.return := registers.accumulator');
         machine.return.set(machine.registers.accumulator.get());
 
-        debug.explain(`[jump] ip := stack.pop() (${target}) [Return]`);
+        logger.explain(`[jump] ip := stack.pop() (${target}) [Return]`);
 
         machine.ip.set(target);
         continue;
@@ -73,7 +68,7 @@ module.exports = function execute(machine, instructions) {
       case 'MulSmi': {
         const value = instruction[1][0]; // Immediate value
 
-        debug.explain(
+        logger.explain(
           `registers.accumulator := registers.accumulator * ${value}`
         );
 
@@ -89,7 +84,7 @@ module.exports = function execute(machine, instructions) {
           machine.registers[register].get() <
           machine.registers.accumulator.get();
 
-        debug.explain(
+        logger.explain(
           `flags.boolean := registers.${register} < registers.accumulator (${result})`
         );
 
@@ -99,7 +94,7 @@ module.exports = function execute(machine, instructions) {
       case 'LdaConstant': {
         const [constIndex] = [instruction[1][0]];
 
-        debug.explain(`registers.accumulator := constants[${constIndex}]`);
+        logger.explain(`registers.accumulator := constants[${constIndex}]`);
 
         machine.registers.accumulator.set(machine.constants[constIndex]);
         break;
@@ -107,7 +102,7 @@ module.exports = function execute(machine, instructions) {
       case 'Ldar': {
         const register = instruction[1];
 
-        debug.explain(`registers.accumulator := registers.${register}`);
+        logger.explain(`registers.accumulator := registers.${register}`);
 
         machine.registers.accumulator.set(machine.registers[register].get());
         break;
@@ -116,7 +111,7 @@ module.exports = function execute(machine, instructions) {
         const nameIndex = instruction[1][0]; // immediate value
         const property = machine.constants[nameIndex];
 
-        debug.explain(`registers.accumulator := constants[${nameIndex}]`);
+        logger.explain(`registers.accumulator := constants[${nameIndex}]`);
 
         machine.registers.accumulator.set(global[property]);
         break;
@@ -125,7 +120,7 @@ module.exports = function execute(machine, instructions) {
         const [register, nameIndex] = [instruction[1], instruction[2][0]];
         const property = machine.constants[nameIndex];
 
-        debug.explain(
+        logger.explain(
           `registers.accumulator := machine.registers.${register}[${property}]`
         );
 
@@ -147,7 +142,7 @@ module.exports = function execute(machine, instructions) {
           machine.registers[arg1Reg].get(),
         ];
 
-        debug.explain(
+        logger.explain(
           `registers.accumulator := machine.registers.${calleeReg}.call(machine.registers.${thisArgReg}, machine.registers.${arg1Reg})`
         );
 
@@ -158,7 +153,7 @@ module.exports = function execute(machine, instructions) {
         const constIndex = instruction[1][0];
         const address = machine.constants[constIndex];
 
-        debug.explain(
+        logger.explain(
           `[jump] ip := constants[${constIndex}] (${address}) [Jump]`
         );
 
@@ -170,14 +165,14 @@ module.exports = function execute(machine, instructions) {
         const address = machine.constants[constIndex];
 
         if (machine.flags.boolean.get() !== false) {
-          debug.explain(
+          logger.explain(
             `[skip] ip := constants[${constIndex}] (${address}) [JumpIfFalse, ${machine.flags.boolean.get()}]`
           );
 
           break;
         }
 
-        debug.explain(
+        logger.explain(
           `[jump] ip := constants[${constIndex}] (${address}) [JumpIfFalse, ${machine.flags.boolean.get()}]`
         );
 
@@ -204,7 +199,7 @@ module.exports = function execute(machine, instructions) {
         registers.forEach((register, index) => {
           const registerNumber = register.slice(1); // r0 -> 0, r2 -> 2
 
-          debug.explain(`registers.a${index} := registers.r${registerNumber}`);
+          logger.explain(`registers.a${index} := registers.r${registerNumber}`);
           machine.registers[`a${index}`].set(
             machine.registers[`r${registerNumber}`].get()
           );
@@ -212,11 +207,11 @@ module.exports = function execute(machine, instructions) {
 
         const ip = machine.ip.get();
 
-        debug.explain(`stack.push(ip) (${ip})`);
+        logger.explain(`stack.push(ip) (${ip})`);
 
         machine.stack.push(ip);
 
-        debug.explain(
+        logger.explain(
           `[jump] ip := constants[${constIndex}] (${address}) [CallUndefinedReceiver]`
         );
 
@@ -230,7 +225,7 @@ module.exports = function execute(machine, instructions) {
     machine.ip.set(machine.ip.get() + 1);
   }
 
-  debug.state(machine.inspect());
+  logger.state(machine.inspect());
 
   return machine;
 };
