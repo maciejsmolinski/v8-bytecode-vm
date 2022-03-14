@@ -1,5 +1,6 @@
 const { logger, registers: r } = require('../utils');
 const fs = require('fs');
+const { LdaSmi, LdaUndefined, LdaZero, Star } = require('./ops');
 
 let buffer;
 
@@ -42,27 +43,21 @@ module.exports = function execute(machine, instructions) {
   let instruction;
 
   while ((instruction = instructions[machine.ip.get()])) {
+    const [instructionName, ...args] = instruction;
+
     logger.op(instruction);
 
     switch (instruction[0]) {
       case 'LdaZero': {
-        logger.explain('registers.accumulator := 0');
-
-        machine.registers.accumulator.set(0);
+        LdaZero({ machine, logger }).execute();
         break;
       }
       case 'LdaSmi': {
-        const value = instruction[1][0]; // Immediate value
-
-        logger.explain('registers.accumulator := ' + value);
-
-        machine.registers.accumulator.set(value);
+        LdaSmi({ machine, logger }).execute(...args);
         break;
       }
       case 'LdaUndefined': {
-        logger.explain('registers.accumulator := undefined');
-
-        machine.registers.accumulator.set(undefined);
+        LdaUndefined({ machine, logger }).execute();
         break;
       }
       case 'Star0':
@@ -81,12 +76,7 @@ module.exports = function execute(machine, instructions) {
       case 'Star13':
       case 'Star14':
       case 'Star15': {
-        const registerName = instruction[0].slice(3);
-        logger.explain(`registers.${registerName} := registers.accumulator`);
-
-        machine.registers[registerName].set(
-          machine.registers.accumulator.get()
-        );
+        Star({ machine, logger, instruction: instructionName }).execute();
         break;
       }
       case 'Return': {
