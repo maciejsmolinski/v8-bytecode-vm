@@ -2,9 +2,11 @@ const { logger, registers: r } = require('../utils');
 const fs = require('fs');
 const {
   LdaSmi,
+  LdaConstant,
   LdaUndefined,
   LdaZero,
   MulSmi,
+  Return,
   Star,
   TestLessThan,
 } = require('./ops');
@@ -87,15 +89,7 @@ module.exports = function execute(machine, instructions) {
         break;
       }
       case 'Return': {
-        const ip = machine.stack.pop();
-        const target = typeof ip !== 'undefined' ? ip + 1 : null;
-
-        logger.explain('machine.return := registers.accumulator');
-        machine.return.set(machine.registers.accumulator.get());
-
-        logger.explain(`[jump] ip := stack.pop() (${target}) [Return]`);
-
-        machine.ip.set(target);
+        Return({ machine, logger }).execute();
         continue;
       }
       case 'MulSmi': {
@@ -107,11 +101,7 @@ module.exports = function execute(machine, instructions) {
         break;
       }
       case 'LdaConstant': {
-        const [constIndex] = [instruction[1][0]];
-
-        logger.explain(`registers.accumulator := constants[${constIndex}]`);
-
-        machine.registers.accumulator.set(machine.constants[constIndex]);
+        LdaConstant({ machine, logger }).execute(...args);
         break;
       }
       case 'Ldar': {
