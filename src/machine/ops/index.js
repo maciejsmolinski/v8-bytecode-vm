@@ -3,6 +3,7 @@ module.exports = {
   CallUndefinedReceiver: require('./CallUndefinedReceiver'),
   Debugger: require('./Debugger'),
   Jump: require('./Jump'),
+  JumpIfFalse: require('./JumpIfFalse'),
   LdaConstant: require('./LdaConstant'),
   LdaGlobal: require('./LdaGlobal'),
   LdaNamedProperty: require('./LdaNamedProperty'),
