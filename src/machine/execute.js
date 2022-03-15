@@ -4,6 +4,7 @@ const {
   CallUndefinedReceiver,
   Debugger,
   Jump,
+  JumpIfFalse,
   LdaConstant,
   LdaGlobal,
   LdaNamedProperty,
@@ -23,6 +24,7 @@ module.exports = function execute(machine, instructions) {
   let instruction;
 
   while ((instruction = instructions[machine.ip.get()])) {
+    const ip = machine.ip.get();
     const [instructionName, ...args] = instruction;
 
     logger.op(instruction);
@@ -61,7 +63,7 @@ module.exports = function execute(machine, instructions) {
       }
       case 'Return': {
         Return({ machine, logger }).execute();
-        continue;
+        break;
       }
       case 'MulSmi': {
         MulSmi({ machine, logger }).execute(...args);
@@ -93,31 +95,16 @@ module.exports = function execute(machine, instructions) {
       }
       case 'Jump': {
         Jump({ machine, logger }).execute(...args);
-        continue;
+        break;
       }
       case 'JumpIfFalse': {
-        const constIndex = instruction[1][0];
-        const address = machine.constants[constIndex];
-
-        if (machine.flags.boolean.get() !== false) {
-          logger.explain(
-            `[skip] ip := constants[${constIndex}] (${address}) [JumpIfFalse, ${machine.flags.boolean.get()}]`
-          );
-
-          break;
-        }
-
-        logger.explain(
-          `[jump] ip := constants[${constIndex}] (${address}) [JumpIfFalse, ${machine.flags.boolean.get()}]`
-        );
-
-        machine.ip.set(address);
-        continue;
+        JumpIfFalse({ machine, logger }).execute(...args);
+        break;
       }
       case 'CallUndefinedReceiver':
       case 'CallUndefinedReceiver1': {
         CallUndefinedReceiver({ machine, logger }).execute(...args);
-        continue;
+        break;
       }
       case 'Debugger': {
         Debugger({ machine, logger }).execute();
@@ -127,7 +114,10 @@ module.exports = function execute(machine, instructions) {
         break;
     }
 
-    machine.ip.set(machine.ip.get() + 1);
+    // Increment instruction pointer if no jumps were made
+    if (machine.ip.get() === ip) {
+      machine.ip.set(machine.ip.get() + 1);
+    }
   }
 
   logger.state(machine.inspect());
