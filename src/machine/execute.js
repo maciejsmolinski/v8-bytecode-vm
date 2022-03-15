@@ -1,8 +1,14 @@
-const { logger, registers: r } = require('../utils');
-const fs = require('fs');
+const { logger } = require('../utils');
 const {
-  LdaSmi,
+  CallProperty1,
+  CallUndefinedReceiver,
+  Debugger,
+  Jump,
   LdaConstant,
+  LdaGlobal,
+  LdaNamedProperty,
+  Ldar,
+  LdaSmi,
   LdaUndefined,
   LdaZero,
   MulSmi,
@@ -10,41 +16,6 @@ const {
   Star,
   TestLessThan,
 } = require('./ops');
-
-let buffer;
-
-function read() {
-  buffer = Buffer.alloc(1024);
-
-  const stdin = fs.openSync('/dev/stdin', 'rs');
-  const stdout = fs.openSync('/dev/stdout', 'as');
-
-  fs.writeSync(stdout, '*vm> ');
-  fs.readSync(stdin, buffer, 0, 1024, null);
-
-  fs.closeSync(stdin);
-  fs.closeSync(stdout);
-
-  return buffer.toString('utf8').replace(/\0/g, '').trim();
-}
-
-function repl(machine) {
-  const expression = read();
-
-  if (expression === 'quit') {
-    return;
-  }
-
-  try {
-    const fn = new Function('machine', `return ${expression}`);
-    console.log(fn(machine));
-  } catch (e) {
-    console.log(
-      `\x1b[31mVM: Error evaluating expression "${expression}"\x1b[0m`
-    );
-  }
-  repl(machine);
-}
 
 module.exports = function execute(machine, instructions) {
   machine.ip.set(0);
@@ -105,64 +76,23 @@ module.exports = function execute(machine, instructions) {
         break;
       }
       case 'Ldar': {
-        const register = instruction[1];
-
-        logger.explain(`registers.accumulator := registers.${register}`);
-
-        machine.registers.accumulator.set(machine.registers[register].get());
+        Ldar({ machine, logger }).execute(...args);
         break;
       }
       case 'LdaGlobal': {
-        const nameIndex = instruction[1][0]; // immediate value
-        const property = machine.constants[nameIndex];
-
-        logger.explain(`registers.accumulator := constants[${nameIndex}]`);
-
-        machine.registers.accumulator.set(global[property]);
+        LdaGlobal({ machine, logger }).execute(...args);
         break;
       }
       case 'LdaNamedProperty': {
-        const [register, nameIndex] = [instruction[1], instruction[2][0]];
-        const property = machine.constants[nameIndex];
-
-        logger.explain(
-          `registers.accumulator := machine.registers.${register}[${property}]`
-        );
-
-        machine.registers.accumulator.set(
-          machine.registers[register].get()[property]
-        );
+        LdaNamedProperty({ machine, logger }).execute(...args);
         break;
       }
       case 'CallProperty1': {
-        const [calleeReg, thisArgReg, arg1Reg] = [
-          instruction[1],
-          instruction[2],
-          instruction[3],
-        ];
-
-        const [callee, thisArg, arg1] = [
-          machine.registers[calleeReg].get(),
-          machine.registers[thisArgReg].get(),
-          machine.registers[arg1Reg].get(),
-        ];
-
-        logger.explain(
-          `registers.accumulator := machine.registers.${calleeReg}.call(machine.registers.${thisArgReg}, machine.registers.${arg1Reg})`
-        );
-
-        machine.registers.accumulator.set(callee.call(thisArg, arg1));
+        CallProperty1({ machine, logger }).execute(...args);
         break;
       }
       case 'Jump': {
-        const constIndex = instruction[1][0];
-        const address = machine.constants[constIndex];
-
-        logger.explain(
-          `[jump] ip := constants[${constIndex}] (${address}) [Jump]`
-        );
-
-        machine.ip.set(address);
+        Jump({ machine, logger }).execute(...args);
         continue;
       }
       case 'JumpIfFalse': {
@@ -186,45 +116,11 @@ module.exports = function execute(machine, instructions) {
       }
       case 'CallUndefinedReceiver':
       case 'CallUndefinedReceiver1': {
-        const paramsRegister = instruction[2];
-        const constIndex = instruction[3][0];
-        const address = machine.constants[constIndex];
-
-        let registers;
-
-        try {
-          registers = r.range(paramsRegister);
-        } catch (e) {
-          throw new Error(
-            'CallUndefinedReceiver failed to understand registers range',
-            paramsRegister
-          );
-        }
-
-        registers.forEach((register, index) => {
-          const registerNumber = register.slice(1); // r0 -> 0, r2 -> 2
-
-          logger.explain(`registers.a${index} := registers.r${registerNumber}`);
-          machine.registers[`a${index}`].set(
-            machine.registers[`r${registerNumber}`].get()
-          );
-        });
-
-        const ip = machine.ip.get();
-
-        logger.explain(`stack.push(ip) (${ip})`);
-
-        machine.stack.push(ip);
-
-        logger.explain(
-          `[jump] ip := constants[${constIndex}] (${address}) [CallUndefinedReceiver]`
-        );
-
-        machine.ip.set(address);
+        CallUndefinedReceiver({ machine, logger }).execute(...args);
         continue;
       }
       case 'Debugger': {
-        repl(machine);
+        Debugger({ machine, logger }).execute();
         break;
       }
       default:
