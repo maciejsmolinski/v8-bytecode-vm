@@ -1,6 +1,13 @@
 const { logger, registers: r } = require('../utils');
 const fs = require('fs');
-const { LdaSmi, LdaUndefined, LdaZero, Star } = require('./ops');
+const {
+  LdaSmi,
+  LdaUndefined,
+  LdaZero,
+  MulSmi,
+  Star,
+  TestLessThan,
+} = require('./ops');
 
 let buffer;
 
@@ -92,29 +99,11 @@ module.exports = function execute(machine, instructions) {
         continue;
       }
       case 'MulSmi': {
-        const value = instruction[1][0]; // Immediate value
-
-        logger.explain(
-          `registers.accumulator := registers.accumulator * ${value}`
-        );
-
-        machine.registers.accumulator.set(
-          machine.registers.accumulator.get() * value
-        );
+        MulSmi({ machine, logger }).execute(...args);
         break;
       }
       case 'TestLessThan': {
-        const register = instruction[1];
-
-        const result =
-          machine.registers[register].get() <
-          machine.registers.accumulator.get();
-
-        logger.explain(
-          `flags.boolean := registers.${register} < registers.accumulator (${result})`
-        );
-
-        machine.flags.boolean.set(result);
+        TestLessThan({ machine, logger }).execute(...args);
         break;
       }
       case 'LdaConstant': {
