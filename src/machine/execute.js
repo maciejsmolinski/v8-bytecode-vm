@@ -25,11 +25,11 @@ module.exports = function execute(machine, instructions) {
 
   while ((instruction = instructions[machine.ip.get()])) {
     const ip = machine.ip.get();
-    const [instructionName, ...args] = instruction;
+    const [mnemonic, ...args] = instruction;
 
     logger.op(instruction);
 
-    switch (instruction[0]) {
+    switch (mnemonic) {
       case 'LdaZero': {
         LdaZero({ machine, logger }).execute();
         break;
@@ -58,7 +58,7 @@ module.exports = function execute(machine, instructions) {
       case 'Star13':
       case 'Star14':
       case 'Star15': {
-        Star({ machine, logger, instruction: instructionName }).execute();
+        Star({ machine, logger, mnemonic }).execute();
         break;
       }
       case 'Return': {

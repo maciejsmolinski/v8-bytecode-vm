@@ -1,7 +1,7 @@
-module.exports = ({ machine, logger, instruction }) => {
+module.exports = ({ machine, logger, mnemonic }) => {
   return {
     execute: function () {
-      const registerName = instruction.slice(3);
+      const registerName = mnemonic.slice(3);
       logger.explain(`registers.${registerName} := registers.accumulator`);
 
       machine.registers[registerName].set(machine.registers.accumulator.get());
