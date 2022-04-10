@@ -7,8 +7,24 @@ An incomplete v8 bytecode interpreter / virtual machine for a subset of instruct
 This project's ambition is building an incomplete virtual machine capable of executing a subset of byte code supported by V8 JavaScript engine as pictured below.
 Largely as a challenge of building a register machine capable of executing different operations, highly practical, as well as to better understand the inner-workings of the most popular and battle-tested JavaScript engine and optimizations happening behind the scenes.
 
-| <img width="200" src="./assets/diagram.png" /> |
-|:-:|
+```mermaid
+graph TD
+
+JS[JavaScript]
+BC[V8 Byte Code]
+VM[Virtual Machine]
+IO[Output]
+V8[JavaScript<br> Engine]
+
+JS-->BC
+BC-->VM
+VM-->IO
+
+JS-->V8
+V8-->IO
+
+style VM fill:blue
+```
 
 
 ## Running virtual machine
