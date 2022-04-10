@@ -1,22 +1,25 @@
 const { logger } = require('../utils');
-const {
-  CallProperty1,
-  CallUndefinedReceiver,
-  Debugger,
-  Jump,
-  JumpIfFalse,
-  LdaConstant,
-  LdaGlobal,
-  LdaNamedProperty,
-  Ldar,
-  LdaSmi,
-  LdaUndefined,
-  LdaZero,
-  MulSmi,
-  Return,
-  Star,
-  TestLessThan,
-} = require('./ops');
+const HANDLERS = require('./ops');
+
+const mapping = {
+  Star0: 'Star',
+  Star1: 'Star',
+  Star2: 'Star',
+  Star3: 'Star',
+  Star4: 'Star',
+  Star5: 'Star',
+  Star6: 'Star',
+  Star7: 'Star',
+  Star8: 'Star',
+  Star9: 'Star',
+  Star10: 'Star',
+  Star11: 'Star',
+  Star12: 'Star',
+  Star13: 'Star',
+  Star14: 'Star',
+  Star15: 'Star',
+  CallUndefinedReceiver1: 'CallUndefinedReceiver',
+};
 
 module.exports = function execute(machine, instructions) {
   machine.ip.set(0);
@@ -29,89 +32,11 @@ module.exports = function execute(machine, instructions) {
 
     logger.op(instruction);
 
-    switch (mnemonic) {
-      case 'LdaZero': {
-        LdaZero({ machine, logger }).execute();
-        break;
-      }
-      case 'LdaSmi': {
-        LdaSmi({ machine, logger }).execute(...args);
-        break;
-      }
-      case 'LdaUndefined': {
-        LdaUndefined({ machine, logger }).execute();
-        break;
-      }
-      case 'Star0':
-      case 'Star1':
-      case 'Star2':
-      case 'Star3':
-      case 'Star4':
-      case 'Star5':
-      case 'Star6':
-      case 'Star7':
-      case 'Star8':
-      case 'Star9':
-      case 'Star10':
-      case 'Star11':
-      case 'Star12':
-      case 'Star13':
-      case 'Star14':
-      case 'Star15': {
-        Star({ machine, logger, mnemonic }).execute();
-        break;
-      }
-      case 'Return': {
-        Return({ machine, logger }).execute();
-        break;
-      }
-      case 'MulSmi': {
-        MulSmi({ machine, logger }).execute(...args);
-        break;
-      }
-      case 'TestLessThan': {
-        TestLessThan({ machine, logger }).execute(...args);
-        break;
-      }
-      case 'LdaConstant': {
-        LdaConstant({ machine, logger }).execute(...args);
-        break;
-      }
-      case 'Ldar': {
-        Ldar({ machine, logger }).execute(...args);
-        break;
-      }
-      case 'LdaGlobal': {
-        LdaGlobal({ machine, logger }).execute(...args);
-        break;
-      }
-      case 'LdaNamedProperty': {
-        LdaNamedProperty({ machine, logger }).execute(...args);
-        break;
-      }
-      case 'CallProperty1': {
-        CallProperty1({ machine, logger }).execute(...args);
-        break;
-      }
-      case 'Jump': {
-        Jump({ machine, logger }).execute(...args);
-        break;
-      }
-      case 'JumpIfFalse': {
-        JumpIfFalse({ machine, logger }).execute(...args);
-        break;
-      }
-      case 'CallUndefinedReceiver':
-      case 'CallUndefinedReceiver1': {
-        CallUndefinedReceiver({ machine, logger }).execute(...args);
-        break;
-      }
-      case 'Debugger': {
-        Debugger({ machine, logger }).execute();
-        break;
-      }
-      default:
-        break;
+    const handler = HANDLERS[mnemonic] || HANDLERS[mapping[mnemonic]];
+
+    // Handle the instruction
+    if (handler) {
+      handler({ machine, logger, mnemonic }).execute(...args);
     }
 
     // Increment instruction pointer if no jumps were made
