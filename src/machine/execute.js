@@ -1,7 +1,7 @@
 const { logger } = require('../utils');
 const HANDLERS = require('./ops');
 
-const mapping = {
+const MAPPING = {
   Star0: 'Star',
   Star1: 'Star',
   Star2: 'Star',
@@ -32,7 +32,7 @@ module.exports = function execute(machine, instructions) {
 
     logger.op(instruction);
 
-    const handler = HANDLERS[mnemonic] || HANDLERS[mapping[mnemonic]];
+    const handler = HANDLERS[mnemonic] || HANDLERS[MAPPING[mnemonic]];
 
     // Handle the instruction
     if (handler) {
