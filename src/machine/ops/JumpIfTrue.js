@@ -6,14 +6,14 @@ module.exports = ({ machine, logger }) => {
 
       if (machine.flags.boolean.get() !== true) {
         logger.explain(
-          `[skip] ip := constants[${constIndex}] (${address}) [JumpIfTrue, ${machine.flags.boolean.get()}]`
+          `[skip] ip := constants[${constIndex}] (${address}) [JumpIfTrue, ${machine.flags.boolean.get()}]`,
         );
 
         return;
       }
 
       logger.explain(
-        `[jump] ip := constants[${constIndex}] (${address}) [JumpIfTrue, ${machine.flags.boolean.get()}]`
+        `[jump] ip := constants[${constIndex}] (${address}) [JumpIfTrue, ${machine.flags.boolean.get()}]`,
       );
 
       machine.ip.set(address);

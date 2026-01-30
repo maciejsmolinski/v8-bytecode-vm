@@ -74,7 +74,7 @@ describe('Virtual Machine', () => {
 
         expect(result).toHaveProperty(
           'registers.accumulator',
-          global.console.log
+          global.console.log,
         );
       });
     });
@@ -158,7 +158,7 @@ describe('Virtual Machine', () => {
           const result = execute(instructions).inspect();
 
           expect(result).toHaveProperty(`flags.boolean`, flag);
-        }
+        },
       );
     });
 
