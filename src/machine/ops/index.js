@@ -4,6 +4,7 @@ module.exports = {
   Debugger: require('./Debugger'),
   Jump: require('./Jump'),
   JumpIfFalse: require('./JumpIfFalse'),
+  JumpIfTrue: require('./JumpIfTrue'),
   LdaConstant: require('./LdaConstant'),
   LdaGlobal: require('./LdaGlobal'),
   LdaNamedProperty: require('./LdaNamedProperty'),
