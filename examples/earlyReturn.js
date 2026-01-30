@@ -11,4 +11,4 @@ function earlyReturn(a) {
   return a;
 }
 
-earlyReturn(5);
+console.log(earlyReturn(5));

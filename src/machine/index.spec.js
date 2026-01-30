@@ -74,7 +74,7 @@ describe('Virtual Machine', () => {
 
         expect(result).toHaveProperty(
           'registers.accumulator',
-          global.console.log
+          global.console.log,
         );
       });
     });
@@ -158,7 +158,7 @@ describe('Virtual Machine', () => {
           const result = execute(instructions).inspect();
 
           expect(result).toHaveProperty(`flags.boolean`, flag);
-        }
+        },
       );
     });
 
@@ -266,6 +266,50 @@ describe('Virtual Machine', () => {
           ['LdaZero'],                 // accumulator := 0
           ['TestLessThan', 'r0', [0]], // flags.boolean := r0 < accumulator = -5 < 0 = true
           ['JumpIfFalse', [0]],        // [ignores] JUMP to instruction at address constants[0] (7)
+          ['LdaSmi', [10]],            // accumulator := 10
+          ['Star1'],                   // r1 := 10
+          ['LdaZero'],                 // accumulator := 0
+        ];
+
+        const result = execute(instructions).inspect();
+
+        expect(result).toHaveProperty(`registers.r1`, 10);
+      });
+    });
+
+    describe('JumpIfTrue [addr_const_index]', () => {
+      it('jumps to the address stored in the given const when flags.boolean is true', () => {
+        constants = [7]; // instruction address / index
+        execute = buildMachine(constants);
+
+        // prettier-ignore
+        const instructions = [
+          ['LdaSmi', [-5]],            // accumulator := -5
+          ['Star0'],                   // r0 := accumulator = -5
+          ['LdaZero'],                 // accumulator := 0
+          ['TestLessThan', 'r0', [0]], // flags.boolean := r0 < accumulator = -5 < 0 = true
+          ['JumpIfTrue', [0]],         // JUMP to instruction at address constants[0] (7)
+          ['LdaSmi', [10]],            // [skips] accumulator := 10
+          ['Star1'],                   // [skips] r1 := 10
+          ['LdaZero'],                 // [jumps here] accumulator := 0
+        ];
+
+        const result = execute(instructions).inspect();
+
+        expect(result).not.toHaveProperty(`registers.r1`, 10);
+      });
+
+      it('ignores jump to the address stored in the given const when flags.boolean is NOT true', () => {
+        constants = [7]; // instruction address / index
+        execute = buildMachine(constants);
+
+        // prettier-ignore
+        const instructions = [
+          ['LdaSmi', [5]],             // accumulator := 5
+          ['Star0'],                   // r0 := accumulator = 5
+          ['LdaZero'],                 // accumulator := 0
+          ['TestLessThan', 'r0', [0]], // flags.boolean := r0 < accumulator = 5 < 0 = false
+          ['JumpIfTrue', [0]],         // [ignores] JUMP to instruction at address constants[0] (7)
           ['LdaSmi', [10]],            // accumulator := 10
           ['Star1'],                   // r1 := 10
           ['LdaZero'],                 // accumulator := 0
